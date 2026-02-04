@@ -4,6 +4,8 @@ Measures moisture in a plant and lights a LED to indicate that water is needed. 
 
 ![Prototype](./img//prototype.jpeg)
 
+![Circuit](./img//circuit.jpeg)
+
 
 ## Parts
 | Part    | Link |
