@@ -13,5 +13,5 @@ Various smaller electonics projects that do not merit a repo of their own.
 
 
 ## Guides
-https://www.electronics-tutorials.ws
-https://www.build-electronic-circuits.com
+- https://www.electronics-tutorials.ws
+- https://www.build-electronic-circuits.com
