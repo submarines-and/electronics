@@ -21,3 +21,6 @@ Measures moisture in a plant and lights a LED to indicate that water is needed. 
 | Transistor | https://www.electrokit.com/bs170-to-92-n-ch-60v-500ma |
 | Battery holder 2032 | https://www.electrokit.com/en/batterihallare-cr2016/2025/2032-plast |
 | Experiment card for soldering | https://www.electrokit.com/en/experimentkort-70x50mm-pertinax |
+
+## Dependencies
+- Sleep mode https://github.com/connornishijima/TinySnore

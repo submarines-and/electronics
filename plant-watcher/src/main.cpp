@@ -11,16 +11,27 @@
 #define SENSOR_POWER 15
 #define NOTIFICATION 33
 #else
-// attiny pins
-#include <avr/sleep.h>
-#include <avr/wdt.h>
 
+// sleep library for attiny
+#include "tinysnore.h"
+
+// attiny pins
 #define SENSOR_CALIBRATION PB1 // 6
 #define SENSOR_INPUT PB3       // 2
 #define SENSOR_POWER PB4       // 3
 #define NOTIFICATION PB2       // 7
 
 #endif
+
+// Fake sleep in dev, real sleep in prod (using lib)
+void sleep(int durationSeconds)
+{
+#ifdef ARDUINO_ADAFRUIT_FEATHER_ESP32_V2
+
+#else
+    snore(durationSeconds * 1000);
+#endif
+}
 
 void setup()
 {
@@ -34,21 +45,6 @@ void setup()
     pinMode(NOTIFICATION, OUTPUT);
 
     digitalWrite(SENSOR_POWER, LOW);
-}
-
-void sleep(const byte duration)
-{
-#ifdef ARDUINO_ADAFRUIT_FEATHER_ESP32_V2
-    delay(8000);
-#else
-    MCUSR = 0;
-    WDTCR |= 0b00011000;
-    WDTCR = 0b01000000 | duration;
-
-    wdt_reset();
-    set_sleep_mode(SLEEP_MODE_PWR_DOWN);
-    sleep_mode();
-#endif
 }
 
 void loop()
@@ -81,25 +77,14 @@ void loop()
             delay(200);
         }
 
-        // sleep 8 seconds
-        sleep(0b100001);
+        // sleep for a short time
+        sleep(10);
     }
     else {
         digitalWrite(SENSOR_POWER, LOW); // 0 = wet
         digitalWrite(NOTIFICATION, LOW);
 
-        // sleep 30 min
-        for (byte j = 0; j <= 225; j++) {
-            sleep(0b100001);
-        }
+        // sleep for a long time
+        sleep(3600);
     }
 }
-
-// called when coming back from sleep
-#if !defined(ARDUINO_ADAFRUIT_FEATHER_ESP32_V2)
-
-ISR(PCINT0_vect)
-{
-    wdt_disable();
-}
-#endif
