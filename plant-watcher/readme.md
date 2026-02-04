@@ -2,7 +2,11 @@
 Measures moisture in a plant and lights a LED to indicate that water is needed. Has a calibration mode, where you can turn the potentiometer on the hygrometer to adjust moisture threshhold, Outside of calibration mode, the attiny will check once every 30 minutes and sleep for the remainder.
 
 
+![Assembled](./img//assembled.jpeg)
+
 ![Prototype](./img//prototype.jpeg)
+
+![Prototype 2](./img//prototype2.jpeg)
 
 ![Circuit](./img//circuit.jpeg)
 
