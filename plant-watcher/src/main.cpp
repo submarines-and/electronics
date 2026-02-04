@@ -12,6 +12,8 @@
 #define NOTIFICATION 33
 #else
 // attiny pins
+#include <avr/sleep.h>
+#include <avr/wdt.h>
 
 #define SENSOR_CALIBRATION PB1 // 6
 #define SENSOR_INPUT PB3       // 2
@@ -32,6 +34,21 @@ void setup()
     pinMode(NOTIFICATION, OUTPUT);
 
     digitalWrite(SENSOR_POWER, LOW);
+}
+
+void sleep(const byte duration)
+{
+#ifdef ARDUINO_ADAFRUIT_FEATHER_ESP32_V2
+    delay(8000);
+#else
+    MCUSR = 0;
+    WDTCR |= 0b00011000;
+    WDTCR = 0b01000000 | duration;
+
+    wdt_reset();
+    set_sleep_mode(SLEEP_MODE_PWR_DOWN);
+    sleep_mode();
+#endif
 }
 
 void loop()
@@ -55,12 +72,34 @@ void loop()
     digitalWrite(SENSOR_POWER, HIGH);
     delay(100);
     if (digitalRead(SENSOR_INPUT) == 1) {
-        digitalWrite(NOTIFICATION, HIGH); // 1 = dry
+        digitalWrite(SENSOR_POWER, LOW); // 1 = dry
+
+        for (byte i = 0; i < 10; i++) {
+            digitalWrite(NOTIFICATION, HIGH);
+            delay(200);
+            digitalWrite(NOTIFICATION, LOW);
+            delay(200);
+        }
+
+        // sleep 8 seconds
+        sleep(0b100001);
     }
     else {
-        digitalWrite(NOTIFICATION, LOW); // 0 = wet
-    }
+        digitalWrite(SENSOR_POWER, LOW); // 0 = wet
+        digitalWrite(NOTIFICATION, LOW);
 
-    digitalWrite(SENSOR_POWER, LOW);
-    delay(2000);
+        // sleep 30 min
+        for (byte j = 0; j <= 225; j++) {
+            sleep(0b100001);
+        }
+    }
 }
+
+// called when coming back from sleep
+#if !defined(ARDUINO_ADAFRUIT_FEATHER_ESP32_V2)
+
+ISR(PCINT0_vect)
+{
+    wdt_disable();
+}
+#endif
