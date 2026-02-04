@@ -3,7 +3,7 @@ I wanted some motion activated lights for when I fetch a tool late at night and 
 
 In my case, an LED filament is used as a light source, but that can of course be substituted.
 
-Project comes with two build configurations in `platformio.ini`, one for debug used directly with an esp8266, the other for prod which is written to the ATTiny. Programmed [using an ESP8266](https://github.com/submarines-and/electronics/avr-isp). 
+Project comes with two build configurations in `platformio.ini`, one for debug used directly with an esp8266, the other for prod which is written to the ATTiny. Programmed [using an ESP8266](https://github.com/submarines-and/electronics/tree/master/avr-isp). 
 
 ## Parts
 | Part    | Link |
