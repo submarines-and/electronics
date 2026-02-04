@@ -4,7 +4,7 @@ Various smaller electonics projects that do not merit a repo of their own.
 
 | Project    | Description |
 | -------- | ------- |
-| ansluta-remote | Custom remote for IKEA Ansluta using an esp8266 |
+| [ansluta-remote](./ansluta-remote) | Custom remote for IKEA Ansluta using an esp8266 |
 | avr-isp | Code and wiring for my AVR programmers |
 | christmas-fireplace | Cosy christmas fireplace with ATTiny85 |
 | night-light | Motion activated led filament |
