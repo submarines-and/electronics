@@ -1,0 +1,21 @@
+{
+	"folders": [
+		{
+			"name": "avr-isp",
+			"path": "avr-isp"
+		},
+		{
+			"name": "serial-monitor",
+			"path": "serial-monitor"
+		},
+		{
+			"name": "night-light",
+			"path": "night-light"
+		},
+		{
+			"name": "plant-watcher",
+			"path": "plant-watcher"
+		}
+	],
+	"settings": {}
+}
