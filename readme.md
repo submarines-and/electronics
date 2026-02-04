@@ -1,5 +1,5 @@
 # Electronics
-Various smaller electonics projects
+Various smaller electonics projects that do not merit a repo of their own.
 
 
 | Project    | Description |
@@ -10,3 +10,8 @@ Various smaller electonics projects
 | night-light | Motion activated led filament |
 | plant-watcher | Checks plant hydration and notifies when water is needed |
 | serial-monitor | Serial monitor proxy for microcontrollers not capable of usb connection |
+
+
+## Guides
+https://www.electronics-tutorials.ws
+https://www.build-electronic-circuits.com
