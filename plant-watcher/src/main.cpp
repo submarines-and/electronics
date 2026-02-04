@@ -60,21 +60,21 @@ void loop()
             digitalWrite(NOTIFICATION, LOW); // 0 = wet
         }
 
-        delay(100);
+        delay(15);
         return;
     }
 
     // normal operation
     digitalWrite(SENSOR_POWER, HIGH);
-    delay(100);
+    delay(20);
     if (digitalRead(SENSOR_INPUT) == 1) {
         digitalWrite(SENSOR_POWER, LOW); // 1 = dry
 
-        for (byte i = 0; i < 10; i++) {
+        for (byte i = 0; i < 5; i++) {
             digitalWrite(NOTIFICATION, HIGH);
-            delay(200);
+            delay(25);
             digitalWrite(NOTIFICATION, LOW);
-            delay(200);
+            delay(25);
         }
 
         // sleep for a short time
