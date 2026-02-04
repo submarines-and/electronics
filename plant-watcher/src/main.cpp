@@ -27,7 +27,7 @@
 void sleep(int durationSeconds)
 {
 #ifdef ARDUINO_ADAFRUIT_FEATHER_ESP32_V2
-
+    delay(durationSeconds * 1000)
 #else
     snore(durationSeconds * 1000);
 #endif
