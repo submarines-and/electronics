@@ -20,7 +20,7 @@ https://docs.platformio.org/en/latest/boards/espressif32/adafruit_feather_esp32_
 | 3.3v     | pin 8    |
 
 
-![Diagram featherv2](/img/diagram-featherv2.png)
+![Diagram featherv2](./img/diagram-featherv2.png)
 
 ![Circuit featherv2](./img/circuit-featherv2.png)
 
@@ -40,7 +40,7 @@ https://docs.platformio.org/en/latest/boards/espressif8266/esp12e.html
 
 
 
-![Diagram esp8266](/img/diagram-esp8266.png)
+![Diagram esp8266](./img/diagram-esp8266.png)
 
 ![Circuit esp8266](./img/circuit-esp8266.png)
 

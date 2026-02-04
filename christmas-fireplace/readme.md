@@ -6,6 +6,6 @@ Programmed using an [ESP8266](https://github.com/submarines-and/avr-isp).
 
 ![Fireplace](./img/fireplace.jpeg)
 
-![Diagram](/img/diagram.jpeg)
+![Diagram](./img/diagram.jpeg)
 
 ![Circuit](./img/circuit.jpeg)

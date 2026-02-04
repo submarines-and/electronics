@@ -23,7 +23,7 @@ Split voltage for photo resistor will vary based on which other resistor value i
 
 ![Lights](./img/lights.jpeg)
 
-![Circuit diagram](/img/circuit.jpeg)
+![Circuit diagram](./img/circuit.jpeg)
 
 ![Soldered card](./img/soldered.jpeg)
 
