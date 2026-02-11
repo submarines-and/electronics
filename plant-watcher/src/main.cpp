@@ -29,7 +29,17 @@ void sleep(int durationSeconds)
 #ifdef ARDUINO_ADAFRUIT_FEATHER_ESP32_V2
     delay(durationSeconds * 1000)
 #else
-    snore(durationSeconds * 1000);
+    snore(durationSeconds * 1000 / 8); // divide by 8 to accomodate slower clock frequency
+#endif
+}
+
+// Adjust delays per platform
+void delayHelper(int durationMs)
+{
+#ifdef ARDUINO_ADAFRUIT_FEATHER_ESP32_V2
+    delay(durationMs)
+#else
+    delay(durationMs / 8); // divide by 8 to accomodate slower clock frequency
 #endif
 }
 
@@ -60,21 +70,21 @@ void loop()
             digitalWrite(NOTIFICATION, LOW); // 0 = wet
         }
 
-        delay(15);
+        delayHelper(100);
         return;
     }
 
     // normal operation
     digitalWrite(SENSOR_POWER, HIGH);
-    delay(20);
+    delayHelper(100);
     if (digitalRead(SENSOR_INPUT) == 1) {
         digitalWrite(SENSOR_POWER, LOW); // 1 = dry
 
         for (byte i = 0; i < 5; i++) {
             digitalWrite(NOTIFICATION, HIGH);
-            delay(25);
+            delayHelper(200);
             digitalWrite(NOTIFICATION, LOW);
-            delay(25);
+            delayHelper(200);
         }
 
         // sleep for a short time
