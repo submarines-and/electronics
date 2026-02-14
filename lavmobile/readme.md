@@ -1,6 +1,15 @@
 # Lävmobile
-Esp32 powered lego car.
+Esp32 powered lego car. 
 
+
+## Flashing
+Create `config-wifi.h` under src with contents: 
+````
+#define WIFI_SSID "<SSID>"
+#define WIFI_PASSWORD "<PASSWORD>"
+```
+
+Flash first time using env:usb, then you can upload using ota by setting ip in platformio.ini.
 
 ## Parts
 | Part    | Link |
@@ -14,3 +23,6 @@ Esp32 powered lego car.
 
 ## Guides
 - https://lukebeales.com/electronics_iot/reviving-30-year-old-lego-technic-with-websockets/
+- https://docs.elegantota.pro/getting-started/integration
+- https://www.youtube.com/watch?v=zibtKRgKjVU
+- https://github.com/ayushsharma82/ElegantOTA/blob/master/platformio_upload.py

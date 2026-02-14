@@ -2,3 +2,6 @@
 .vscode
 .DS_Store
 .gitignore
+
+## all wifi files
+config-wifi.h
