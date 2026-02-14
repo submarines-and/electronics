@@ -1,9 +1,10 @@
 # Lävmobile
-Esp32 powered lego car. 
+Esp32 powered lego car with over the air updates.
 
 ![Driving prototype](./img/prototype.mov)
 
-![Lego model](./img/prototype.jpeg)
+## Wiring
+n/a
 
 
 ## Flashing
@@ -42,3 +43,5 @@ Depending on lego model and gearbox setup, you will need 1-4 DC motors and at le
 - https://docs.elegantota.pro/getting-started/integration
 - https://www.youtube.com/watch?v=zibtKRgKjVU
 - https://github.com/ayushsharma82/ElegantOTA/blob/master/platformio_upload.py
+
+![Lego model](./img/prototype.jpeg)
