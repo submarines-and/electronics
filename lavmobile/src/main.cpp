@@ -1,49 +1,75 @@
-#if defined(ESP8266)
-#include <ESP8266WebServer.h>
-#include <ESP8266WiFi.h>
-#include <WiFiClient.h>
-#elif defined(ESP32)
+#include "config-wifi.h"
+#include <ElegantOTA.h>
 #include <WebServer.h>
 #include <WiFi.h>
 #include <WiFiClient.h>
-#endif
 
-#include "config-wifi.h"
-#include <ElegantOTA.h>
+// pins
+#define AIN1 A1
+#define AIN2 A2
 
-#if defined(ESP8266)
-ESP8266WebServer server(80);
-#elif defined(ESP32)
+// Ota server
 WebServer server(80);
-#endif
 
 void setup(void)
 {
+    /**
+     * OTA
+     */
     WiFi.mode(WIFI_STA);
-    WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+    WiFi.begin(WIFI_SSID, WIFI_PASSWORD); // from "config-wifi.h, see readme file for contents"
 
-    // Wait for connection
     while (WiFi.status() != WL_CONNECTED) {
         delay(500);
     }
-
-    server.on("/", []() {
-        server.send(200, "text/plain", "/update");
-    });
+    server.on("/", []() { server.send(200, "text/plain", "/update"); });
 
     ElegantOTA.begin(&server);
     server.begin();
 
-    pinMode(13, OUTPUT);
+    /**
+     * App
+     */
+    pinMode(AIN1, OUTPUT);
+    pinMode(AIN2, OUTPUT);
 }
 
 void loop(void)
 {
+    /**
+     * OTA
+     */
     server.handleClient();
     ElegantOTA.loop();
 
-    digitalWrite(13, HIGH);
-    delay(200);
-    digitalWrite(13, LOW);
-    delay(200);
+    /**
+     * App
+     */
+
+    // FORWARD
+    digitalWrite(AIN2, LOW);
+
+    // ramp speed up
+    for (int duty_cycle = 0; duty_cycle < 256; duty_cycle++) {
+        analogWrite(AIN1, duty_cycle);
+        delay(10);
+    }
+    // ramp speed down
+    for (int duty_cycle = 255; duty_cycle >= 0; duty_cycle--) {
+        analogWrite(AIN1, duty_cycle);
+        delay(10);
+    }
+
+    // REVERSE
+    digitalWrite(AIN1, LOW);
+    // ramp speed up
+    for (int duty_cycle = 0; duty_cycle < 256; duty_cycle++) {
+        analogWrite(AIN2, duty_cycle);
+        delay(10);
+    }
+    // ramp speed down
+    for (int duty_cycle = 255; duty_cycle >= 0; duty_cycle--) {
+        analogWrite(AIN2, duty_cycle);
+        delay(10);
+    }
 }
