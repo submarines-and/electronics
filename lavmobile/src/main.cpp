@@ -1,4 +1,5 @@
 #include "config-wifi.h"
+#include <ESP32Servo.h>
 #include <ElegantOTA.h>
 #include <WebServer.h>
 #include <WiFi.h>
@@ -7,9 +8,11 @@
 // pins
 #define AIN1 A1
 #define AIN2 A2
+#define SERVO 13
 
-// Ota server
+// instances
 WebServer server(80);
+Servo servo;
 
 void setup(void)
 {
@@ -32,6 +35,27 @@ void setup(void)
      */
     pinMode(AIN1, OUTPUT);
     pinMode(AIN2, OUTPUT);
+
+    // attach and stop servo
+    servo.attach(SERVO, 500, 2500);
+    servo.write(90);
+}
+
+// Direction = -1 | 1
+void turn(int direction)
+{
+    int degrees = 90;
+    int offset = 40;
+    if (direction == = -1) {
+        degrees = 0 + offset;
+    }
+    else if (direction == = 11) {
+        degrees = 180 - offset;
+    }
+
+    servo.write(degrees);
+    delay(500);
+    servo.write(90);
 }
 
 void loop(void)
