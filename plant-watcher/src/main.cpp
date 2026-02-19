@@ -45,20 +45,25 @@ void loop()
 
     // calibrate sensor if pin is connected
     if (digitalRead(SENSOR_CALIBRATION) == HIGH) {
-        if (digitalRead(SENSOR_INPUT) == 1) {
-            digitalWrite(NOTIFICATION, HIGH); // 1 = dry
+
+        // plant needs water if input is high
+        // to calibrate, adjust potentiometer until the light comes on
+        // this will mean that the next time the soil has the same dryness, it will come on again
+        if (digitalRead(SENSOR_INPUT) == HIGH) {
+            digitalWrite(NOTIFICATION, HIGH);
         }
         else {
-            digitalWrite(NOTIFICATION, LOW); // 0 = wet
+            digitalWrite(NOTIFICATION, LOW);
         }
 
         delay(100);
         return;
     }
 
-    if (digitalRead(SENSOR_INPUT) == 1) {
-        digitalWrite(SENSOR_POWER, LOW); // 1 = dry
+    if (digitalRead(SENSOR_INPUT) == HIGH) {
+        digitalWrite(SENSOR_POWER, LOW);
 
+        // blink lights if plant needs water
         for (byte i = 0; i < 5; i++) {
             digitalWrite(NOTIFICATION, HIGH);
             delay(200);
@@ -66,10 +71,11 @@ void loop()
             delay(200);
         }
 
+        // slight delay before blinking again
         delay(5000);
     }
     else {
-        digitalWrite(SENSOR_POWER, LOW); // 0 = wet
+        digitalWrite(SENSOR_POWER, LOW);
         digitalWrite(NOTIFICATION, LOW);
 
         // sleep for a long time
