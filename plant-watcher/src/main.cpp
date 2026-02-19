@@ -35,16 +35,16 @@ void setup()
     pinMode(SENSOR_INPUT, INPUT);
     pinMode(SENSOR_POWER, OUTPUT);
     pinMode(NOTIFICATION, OUTPUT);
-
-    digitalWrite(SENSOR_POWER, LOW);
 }
 
 void loop()
 {
+    // activate sensor then delay to ensure it has time to turn on
+    digitalWrite(SENSOR_POWER, HIGH);
+    delay(100);
 
     // calibrate sensor if pin is connected
     if (digitalRead(SENSOR_CALIBRATION) == HIGH) {
-        digitalWrite(SENSOR_POWER, HIGH);
         if (digitalRead(SENSOR_INPUT) == 1) {
             digitalWrite(NOTIFICATION, HIGH); // 1 = dry
         }
@@ -55,10 +55,6 @@ void loop()
         delay(100);
         return;
     }
-
-    // normal operation - activate sensor then delay to ensure it has time to turn on
-    digitalWrite(SENSOR_POWER, HIGH);
-    delay(100);
 
     if (digitalRead(SENSOR_INPUT) == 1) {
         digitalWrite(SENSOR_POWER, LOW); // 1 = dry
