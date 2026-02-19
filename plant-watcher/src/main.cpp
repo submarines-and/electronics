@@ -24,12 +24,12 @@
 #endif
 
 // Fake sleep in dev, real sleep in prod (using lib)
-void sleep(int durationSeconds)
+void sleepHelper(int durationMs)
 {
 #ifdef ARDUINO_ADAFRUIT_FEATHER_ESP32_V2
-    delay(durationSeconds * 1000)
+    delay(durationMs)
 #else
-    snore(durationSeconds * 1000 / 8); // divide by 8 to accomodate slower clock frequency
+    snore(durationSeconds / 8); // divide by 8 to accomodate slower clock frequency
 #endif
 }
 
@@ -74,9 +74,10 @@ void loop()
         return;
     }
 
-    // normal operation
+    // normal operation - activate sensor then delay to ensure it has time to turn on
     digitalWrite(SENSOR_POWER, HIGH);
     delayHelper(100);
+
     if (digitalRead(SENSOR_INPUT) == 1) {
         digitalWrite(SENSOR_POWER, LOW); // 1 = dry
 
@@ -87,14 +88,13 @@ void loop()
             delayHelper(200);
         }
 
-        // sleep for a short time
-        sleep(10);
+        delayHelper(5000);
     }
     else {
         digitalWrite(SENSOR_POWER, LOW); // 0 = wet
         digitalWrite(NOTIFICATION, LOW);
 
         // sleep for a long time
-        sleep(3600);
+        sleepHelper(60 * 60 * 1000);
     }
 }
