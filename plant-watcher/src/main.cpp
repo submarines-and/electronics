@@ -5,11 +5,13 @@
  *
  */
 #ifdef ARDUINO_ADAFRUIT_FEATHER_ESP32_V2
+
 // featherv2 pins
 #define SENSOR_CALIBRATION 37
 #define SENSOR_INPUT 12
 #define SENSOR_POWER 15
 #define NOTIFICATION 33
+
 #else
 
 // sleep library for attiny
@@ -22,26 +24,6 @@
 #define NOTIFICATION PB2       // 7
 
 #endif
-
-// Fake sleep in dev, real sleep in prod (using lib)
-void sleepHelper(int durationMs)
-{
-#ifdef ARDUINO_ADAFRUIT_FEATHER_ESP32_V2
-    delay(durationMs)
-#else
-    snore(durationMs / 8); // divide by 8 to accomodate slower clock frequency
-#endif
-}
-
-// Adjust delays per platform
-void delayHelper(int durationMs)
-{
-#ifdef ARDUINO_ADAFRUIT_FEATHER_ESP32_V2
-    delay(durationMs)
-#else
-    delay(durationMs / 8); // divide by 8 to accomodate slower clock frequency
-#endif
-}
 
 void setup()
 {
@@ -70,31 +52,38 @@ void loop()
             digitalWrite(NOTIFICATION, LOW); // 0 = wet
         }
 
-        delayHelper(100);
+        delay(100);
         return;
     }
 
     // normal operation - activate sensor then delay to ensure it has time to turn on
     digitalWrite(SENSOR_POWER, HIGH);
-    delayHelper(100);
+    delay(100);
 
     if (digitalRead(SENSOR_INPUT) == 1) {
         digitalWrite(SENSOR_POWER, LOW); // 1 = dry
 
         for (byte i = 0; i < 5; i++) {
             digitalWrite(NOTIFICATION, HIGH);
-            delayHelper(200);
+            delay(200);
             digitalWrite(NOTIFICATION, LOW);
-            delayHelper(200);
+            delay(200);
         }
 
-        delayHelper(5000);
+        delay(5000);
     }
     else {
         digitalWrite(SENSOR_POWER, LOW); // 0 = wet
         digitalWrite(NOTIFICATION, LOW);
 
         // sleep for a long time
-        sleepHelper(30 * 60 * 1000);
+        // Fake sleep in dev, real sleep in prod (using lib)
+        int durationMs = 30 * 60 * 1000;
+
+#ifdef ARDUINO_ADAFRUIT_FEATHER_ESP32_V2
+        delay(durationMs)
+#else
+        snore(durationMs);
+#endif
     }
 }
