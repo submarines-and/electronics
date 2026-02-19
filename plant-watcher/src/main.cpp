@@ -29,7 +29,7 @@ void sleepHelper(int durationMs)
 #ifdef ARDUINO_ADAFRUIT_FEATHER_ESP32_V2
     delay(durationMs)
 #else
-    snore(durationSeconds / 8); // divide by 8 to accomodate slower clock frequency
+    snore(durationMs / 8); // divide by 8 to accomodate slower clock frequency
 #endif
 }
 
