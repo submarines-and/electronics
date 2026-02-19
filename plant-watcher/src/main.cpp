@@ -64,7 +64,7 @@ void loop()
         digitalWrite(SENSOR_POWER, LOW);
 
         // blink lights if plant needs water
-        for (byte i = 0; i < 5; i++) {
+        for (int i = 0; i < 5; i++) {
             digitalWrite(NOTIFICATION, HIGH);
             delay(200);
             digitalWrite(NOTIFICATION, LOW);
@@ -72,20 +72,24 @@ void loop()
         }
 
         // slight delay before blinking again
-        delay(5000);
+        delay(10000);
     }
     else {
         digitalWrite(SENSOR_POWER, LOW);
         digitalWrite(NOTIFICATION, LOW);
 
-        // sleep for a long time
-        // Fake sleep in dev, real sleep in prod (using lib)
-        int durationMs = 30 * 60 * 1000;
-
 #ifdef ARDUINO_ADAFRUIT_FEATHER_ESP32_V2
-        delay(durationMs)
+
+        // in dev, wait a short while
+        delay(5000)
 #else
-        snore(durationMs);
+
+        // in prod, sleep for an hour
+        // use a loop to avoid int overflow
+        uint32_t tenMinutes = 600000;
+        for (int i = 0; i < 6; i++) {
+            snore(tenMinutes);
+        }
 #endif
     }
 }
