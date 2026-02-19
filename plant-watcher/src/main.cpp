@@ -95,6 +95,6 @@ void loop()
         digitalWrite(NOTIFICATION, LOW);
 
         // sleep for a long time
-        sleepHelper(60 * 60 * 1000);
+        sleepHelper(30 * 60 * 1000);
     }
 }
