@@ -22,5 +22,12 @@ int Logic::getDistance()
     digitalWrite(TRIGGER, LOW);
 
     // Speed of sound wave divided by 2 (there and back again)
-    return pulseIn(ECHO, HIGH) * 0.034 / 2;
+    int distanceCM = pulseIn(ECHO, HIGH) * 0.034 / 2;
+
+#ifdef DEBUG
+    Serial.print("Logic.getDistance");
+    Serial.println(distanceCM);
+#endif
+
+    return distanceCM;
 }
