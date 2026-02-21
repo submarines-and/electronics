@@ -22,30 +22,39 @@ void Engine::setup()
  */
 void Engine::drive(int direction)
 {
-    digitalWrite(AIN1, LOW);
-    digitalWrite(AIN2, LOW);
+    if (isDriving) {
+        return;
+    }
+
+    currentDirection = direction;
+
+    // turn of the other direction
+    digitalWrite(direction == -1 ? AIN1 : AIN2, LOW);
 
     // ramp speed up
     for (int duty_cycle = 0; duty_cycle < 256; duty_cycle++) {
         analogWrite(direction == -1 ? AIN2 : AIN1, duty_cycle);
         delay(10);
     }
-    // ramp speed down
-    for (int duty_cycle = 255; duty_cycle >= 0; duty_cycle--) {
-        analogWrite(direction == -1 ? AIN2 : AIN1, duty_cycle);
-        delay(10);
-    }
+
+    isDriving = true;
 }
 
 /**
  * Turn the car
  *
- * Direction -1 is left, 1 is right
+ * Direction
+ *  -1 left
+ *  0 straight
+ *  1 right
  */
 void Engine::turn(int direction)
 {
     int degrees = 90;
+
+    // offset that makes it turn enough
     int offset = 40;
+
     if (direction == -1) {
         degrees = 0 + offset;
     }
@@ -53,7 +62,18 @@ void Engine::turn(int direction)
         degrees = 180 - offset;
     }
 
+    // turn and wait for turn to complete
     servo.write(degrees);
     delay(500);
-    servo.write(90);
+}
+
+void Engine::stop()
+{
+    // ramp speed down
+    for (int duty_cycle = 255; duty_cycle >= 0; duty_cycle--) {
+        analogWrite(currentDirection == -1 ? AIN2 : AIN1, duty_cycle);
+        delay(10);
+    }
+
+    isDriving = false;
 }
