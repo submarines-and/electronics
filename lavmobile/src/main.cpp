@@ -37,6 +37,6 @@ void loop(void)
     engine.drive(-1);
     delay(1000);
 
-    // then continue straight
-    engine.turn(0);
+    // then continue straight (turn back to center)
+    engine.turn(1);
 }

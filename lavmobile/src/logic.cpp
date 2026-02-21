@@ -25,7 +25,7 @@ int Logic::getDistance()
     int distanceCM = pulseIn(ECHO, HIGH) * 0.034 / 2;
 
 #ifdef DEBUG
-    Serial.print("Logic.getDistance");
+    Serial.print("Logic.getDistance ");
     Serial.println(distanceCM);
 #endif
 

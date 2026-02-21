@@ -33,7 +33,7 @@ void Engine::drive(int direction)
     }
 
 #ifdef DEBUG
-    Serial.print("Engine.drive");
+    Serial.print("Engine.drive, direction: ");
     Serial.println(direction);
 #endif
 
@@ -56,13 +56,12 @@ void Engine::drive(int direction)
  *
  * Direction
  *  -1 left
- *  0 straight
  *  1 right
  */
 void Engine::turn(int direction)
 {
 #ifdef DEBUG
-    Serial.print("Engine.turn");
+    Serial.print("Engine.turn ");
     Serial.println(direction);
 #endif
 
@@ -78,9 +77,19 @@ void Engine::turn(int direction)
         degrees = 180 - offset;
     }
 
+#ifdef DEBUG
+    Serial.print("Engine.turn, direction: ");
+    Serial.print(direction);
+    Serial.print(", degrees (speed):");
+    Serial.println(degrees);
+#endif
+
     // turn and wait for turn to complete
     servo.write(degrees);
     delay(500);
+
+    // stop
+    servo.write(90);
 }
 
 void Engine::stop()
