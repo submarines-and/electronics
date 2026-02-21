@@ -3,7 +3,7 @@
 
 #define AIN1 A1
 #define AIN2 A2
-#define SLP 39
+#define SLP 27
 #define SERVO 12
 
 void Engine::setup()
@@ -11,6 +11,7 @@ void Engine::setup()
     pinMode(AIN1, OUTPUT);
     pinMode(AIN2, OUTPUT);
     pinMode(SLP, OUTPUT);
+    digitalMode(SERVO, OUTPUT);
 
     // start engine
     digitalWrite(SLP, HIGH);
