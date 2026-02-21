@@ -31,10 +31,12 @@ void OTA::setup()
         digitalWrite(WIFI_CONNECTING_FEEDBACK, HIGH);
         delay(500);
         digitalWrite(WIFI_CONNECTING_FEEDBACK, LOW);
+        delay(500);
     }
 
 #ifdef DEBUG
-    Serial.println("");
+    Serial.println("Connected!");
+    Serial.println(WiFi.localIP());
 #endif
 
     // redirect on root
