@@ -30,7 +30,7 @@ void OTA::setup()
         // blink build in led while connecting to wifi
         digitalWrite(WIFI_CONNECTING_FEEDBACK, HIGH);
         delay(500);
-        digitalWrite(WIFI_CONNECTING_FEEDBACK, LOW)
+        digitalWrite(WIFI_CONNECTING_FEEDBACK, LOW);
     }
 
 #ifdef DEBUG
