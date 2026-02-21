@@ -11,7 +11,7 @@ void Engine::setup()
     pinMode(AIN1, OUTPUT);
     pinMode(AIN2, OUTPUT);
     pinMode(SLP, OUTPUT);
-    digitalMode(SERVO, OUTPUT);
+    pinMode(SERVO, OUTPUT);
 
     // start engine
     digitalWrite(SLP, HIGH);
