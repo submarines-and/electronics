@@ -3,12 +3,17 @@
 
 #define AIN1 A1
 #define AIN2 A2
+#define SLP A3
 #define SERVO 12
 
 void Engine::setup()
 {
     pinMode(AIN1, OUTPUT);
     pinMode(AIN2, OUTPUT);
+    pinMode(SLP, OUTPUT);
+
+    // start engine
+    digitalWrite(SLP, HIGH);
 
     // attach and stop servo
     servo.attach(SERVO, 500, 2500);
