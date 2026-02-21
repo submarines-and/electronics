@@ -1,10 +1,6 @@
 #include "engine.h"
+#include "pins.h"
 #include <Arduino.h>
-
-#define AIN1 A1
-#define AIN2 A2
-#define SLP 27
-#define SERVO 13
 
 void Engine::setup()
 {
@@ -32,7 +28,7 @@ void Engine::setup()
  */
 void Engine::drive(int direction)
 {
-    if (isDriving) {
+    if (isDriving && direction == currentDirection) {
         return;
     }
 

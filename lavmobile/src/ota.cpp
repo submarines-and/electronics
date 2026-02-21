@@ -1,11 +1,10 @@
 #include "ota.h"
 #include "config-wifi.h"
+#include "pins.h"
 #include <Arduino.h>
 #include <ElegantOTA.h>
 #include <WiFi.h>
 #include <WiFiClient.h>
-
-#define WIFI_CONNECTING_FEEDBACK 13
 
 void OTA::setup()
 {

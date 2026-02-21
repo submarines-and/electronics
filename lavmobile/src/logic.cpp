@@ -1,8 +1,6 @@
 #include "logic.h"
+#include "pins.h"
 #include <Arduino.h>
-
-#define TRIGGER 14
-#define ECHO 15
 
 void Logic::setup()
 {

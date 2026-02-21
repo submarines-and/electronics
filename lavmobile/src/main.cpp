@@ -22,9 +22,8 @@ void loop(void)
 {
     ota.checkForUpdate();
 
+    // go forward if clear
     auto distance = logic.getDistance();
-
-    // go forward i clear
     if (distance >= 30) {
         engine.drive(1);
         delay(100);
@@ -35,7 +34,7 @@ void loop(void)
     engine.stop();
     engine.turn(-1);
     engine.drive(-1);
-    delay(1000);
+    delay(500);
 
     // then continue straight (turn back to center)
     engine.turn(1);
