@@ -1,6 +1,7 @@
 #include "engine.h"
 #include "logic.h"
 #include "ota.h"
+#include <Arduino.h>
 
 OTA ota;
 Engine engine;
@@ -19,7 +20,6 @@ void setup(void)
 
 void loop(void)
 {
-
     ota.checkForUpdate();
 
     auto distance = logic.getDistance();

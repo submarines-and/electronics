@@ -1,5 +1,6 @@
 #include "ota.h"
 #include "config-wifi.h"
+#include <Arduino.h>
 #include <ElegantOTA.h>
 #include <WiFi.h>
 #include <WiFiClient.h>

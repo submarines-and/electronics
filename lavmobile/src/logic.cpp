@@ -1,4 +1,5 @@
 #include "logic.h"
+#include <Arduino.h>
 
 #define TRIGGER 14
 #define ECHO 15
@@ -9,7 +10,8 @@ void Logic::setup()
     pinMode(ECHO, INPUT);
 }
 
-int32_t Logic::getDistance()
+/** Returns distance in CM */
+int Logic::getDistance()
 {
     digitalWrite(TRIGGER, LOW);
     delayMicroseconds(2);
