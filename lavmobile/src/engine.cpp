@@ -8,6 +8,10 @@
 
 void Engine::setup()
 {
+#ifdef DEBUG
+    Serial.println("Engine.setup");
+#endif
+
     pinMode(AIN1, OUTPUT);
     pinMode(AIN2, OUTPUT);
     pinMode(SLP, OUTPUT);

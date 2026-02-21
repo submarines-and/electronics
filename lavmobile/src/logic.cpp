@@ -6,6 +6,10 @@
 
 void Logic::setup()
 {
+#ifdef DEBUG
+    Serial.println("Logic.setup");
+#endif
+
     pinMode(TRIGGER, OUTPUT);
     pinMode(ECHO, INPUT);
 }
