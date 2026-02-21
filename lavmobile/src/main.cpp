@@ -8,7 +8,9 @@
 // pins
 #define AIN1 A1
 #define AIN2 A2
-#define SERVO 13
+#define SERVO 12
+#define TRIGGER 14
+#define ECHO 15
 
 // instances
 WebServer server(80);
@@ -16,6 +18,10 @@ Servo servo;
 
 void setup(void)
 {
+#ifdef DEBUG
+    Serial.begin(115200);
+#endif
+
     /**
      * OTA
      */
@@ -35,6 +41,8 @@ void setup(void)
      */
     pinMode(AIN1, OUTPUT);
     pinMode(AIN2, OUTPUT);
+    pinMode(TRIGGER, OUTPUT);
+    pinMode(ECHO, INPUT);
 
     // attach and stop servo
     servo.attach(SERVO, 500, 2500);
@@ -56,6 +64,26 @@ void turn(int direction)
     servo.write(degrees);
     delay(500);
     servo.write(90);
+}
+
+void checkDistance()
+{
+    digitalWrite(TRIGGER, LOW);
+    delayMicroseconds(2);
+
+    // read distance
+    digitalWrite(TRIGGER, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(TRIGGER, LOW);
+
+    // Speed of sound wave divided by 2 (there and back again)
+    int32_t distance = pulseIn(ECHO, HIGH) * 0.034 / 2;
+
+    Serial.print("Distance: ");
+    Serial.print(distance);
+    Serial.println(" cm");
+
+    delay(500);
 }
 
 void loop(void)
