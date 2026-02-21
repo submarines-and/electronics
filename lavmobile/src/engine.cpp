@@ -3,7 +3,7 @@
 
 #define AIN1 A1
 #define AIN2 A2
-#define SLP A3
+#define SLP 39
 #define SERVO 12
 
 void Engine::setup()
@@ -31,6 +31,11 @@ void Engine::drive(int direction)
         return;
     }
 
+#ifdef DEBUG
+    Serial.print("Engine.drive");
+    Serial.println(direction);
+#endif
+
     currentDirection = direction;
 
     // turn of the other direction
@@ -55,6 +60,11 @@ void Engine::drive(int direction)
  */
 void Engine::turn(int direction)
 {
+#ifdef DEBUG
+    Serial.print("Engine.turn");
+    Serial.println(direction);
+#endif
+
     int degrees = 90;
 
     // offset that makes it turn enough
@@ -74,6 +84,9 @@ void Engine::turn(int direction)
 
 void Engine::stop()
 {
+#ifdef DEBUG
+    Serial.println("Engine.stop");
+#endif
     // ramp speed down
     for (int duty_cycle = 255; duty_cycle >= 0; duty_cycle--) {
         analogWrite(currentDirection == -1 ? AIN2 : AIN1, duty_cycle);
