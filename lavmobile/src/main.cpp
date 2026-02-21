@@ -46,10 +46,10 @@ void turn(int direction)
 {
     int degrees = 90;
     int offset = 40;
-    if (direction == = -1) {
+    if (direction == -1) {
         degrees = 0 + offset;
     }
-    else if (direction == = 11) {
+    else if (direction == 1) {
         degrees = 180 - offset;
     }
 
