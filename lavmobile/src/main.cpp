@@ -23,9 +23,20 @@ void loop(void)
     ota.checkForUpdate();
 
     auto distance = logic.getDistance();
-    Serial.print("Distance: ");
-    Serial.print(distance);
-    Serial.println(" cm");
 
-    delay(500);
+    // go forward i clear
+    if (distance >= 30) {
+        engine.drive(1);
+        delay(100);
+        return;
+    }
+
+    // obstacles detected, stop and reverse left
+    engine.stop();
+    engine.turn(-1);
+    engine.drive(-1);
+    delay(1000);
+
+    // then continue straight
+    engine.turn(0);
 }
