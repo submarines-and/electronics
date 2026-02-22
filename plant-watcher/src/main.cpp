@@ -58,7 +58,6 @@ void loop()
             digitalWrite(NOTIFICATION, LOW);
         }
 
-        delay(100);
         return;
     }
 
