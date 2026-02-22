@@ -35,6 +35,8 @@ void setup()
     pinMode(SENSOR_INPUT, INPUT);
     pinMode(SENSOR_POWER, OUTPUT);
     pinMode(NOTIFICATION, OUTPUT);
+
+    digitalWrite(SENSOR_POWER, LOW);
 }
 
 void loop()
