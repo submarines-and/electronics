@@ -1,7 +1,7 @@
 # Lävmobile
-Esp32 powered lego car with over the air updates.
+Esp32 powered lego car controlled through a simple web socket interface.
 
-![Driving prototype](./img/prototype.mov)
+![Driving prototype](./img/driving.gif)
 
 ## Wiring
 n/a

@@ -10,7 +10,7 @@ Various smaller electonics projects that do not merit a repo of their own.
 | [night-light](./night-light) | Motion activated led filament |
 | [plant-watcher](./plant-watcher) | Checks plant hydration and notifies when water is needed |
 | [serial-monitor](./serial-monitor) | Serial monitor proxy for microcontrollers not capable of usb connection |
-| [lavmobile](./lavmobile) | Self driving lego car. |
+| [lavmobile](./lavmobile) | Remote controlled lego car. |
 
 
 ## Guides
