@@ -19,6 +19,26 @@ void Engine::setup()
     servo.write(90);
 }
 
+/** Process current direction */
+void Engine::loop()
+{
+    if (currentDirection == 1) {
+        // forward
+        digitalWrite(AIN1, HIGH);
+        digitalWrite(AIN2, LOW);
+    }
+    else if (currentDirection == -1) {
+        // reverse
+        digitalWrite(AIN1, LOW);
+        digitalWrite(AIN2, HIGH);
+    }
+    else {
+        // stop
+        digitalWrite(AIN1, LOW);
+        digitalWrite(AIN2, LOW);
+    }
+}
+
 /**
  * Drive!
  * -1 is backwards
@@ -29,16 +49,7 @@ void Engine::drive(int direction)
     Serial.print("Engine.drive, direction: ");
     Serial.println(direction);
 
-    if (direction == 1) {
-        // forward
-        digitalWrite(AIN1, HIGH);
-        digitalWrite(AIN2, LOW);
-    }
-    else {
-        // reverse
-        digitalWrite(AIN1, LOW);
-        digitalWrite(AIN2, HIGH);
-    }
+    currentDirection = direction;
 }
 
 /**
@@ -72,15 +83,8 @@ void Engine::turn(int direction)
 
     // turn and wait for turn to complete
     servo.write(degrees);
-    delay(200);
+    delay(300);
 
     // stop
     servo.write(90);
-}
-
-void Engine::stop()
-{
-    Serial.println("Engine.stop");
-    digitalWrite(AIN1, LOW);
-    digitalWrite(AIN2, LOW);
 }

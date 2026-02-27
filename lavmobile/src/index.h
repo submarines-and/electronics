@@ -2,7 +2,7 @@ const char* HTML_CONTENT = R"=====(
 <!DOCTYPE html>
 <html>
 <head>
-<title>Lävmobile</title>
+<title>Lavmobile</title>
 <meta name="viewport" content="width=device-width, initial-scale=0.7, maximum-scale=1, user-scalable=no">
 <style type="text/css">
 body { text-align: center; font-size: 24px;}
@@ -137,7 +137,7 @@ function mouse_up(event)
   if (event.target !== event.currentTarget) 
   {
     var id = event.target.id;
-    send_command(CMD_STOP);
+  //  send_command(CMD_STOP);
     event.target.style.backgroundImage = "url('https://esp32io.com/images/tutorial/" + img_name_lookup[id] + "_inactive.png')";
     }
     event.stopPropagation();   

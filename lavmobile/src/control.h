@@ -2,6 +2,7 @@
 #include "engine.h"
 #include "index.h"
 #include <DIYables_ESP32_WebServer.h>
+#include <ESPmDNS.h>
 
 #define CMD_STOP 0
 #define CMD_FORWARD 1
@@ -38,7 +39,7 @@ void onWebSocketMessage(net::WebSocket& ws, const net::WebSocket::DataType dataT
 
     switch (command) {
     case CMD_STOP:
-        engine.stop();
+        engine.drive(0);
         break;
 
     case CMD_FORWARD:
@@ -68,18 +69,19 @@ void setupControl()
     server.addRoute("/", onWebRequest);
 
     server.begin(WIFI_SSID, WIFI_PASSWORD);
-    webSocket = server.enableWebSocket(81);
 
-    // event handlers
+    // web socket event handlers
+    webSocket = server.enableWebSocket(81);
     if (webSocket != nullptr) {
         webSocket->onOpen(onWebSocketOpen);
         webSocket->onMessage(onWebSocketMessage);
         webSocket->onClose(onWebSocketClose);
     }
     else {
-        Serial.println("Control.setup - Failed to start server");
+        Serial.println("Control.setup - Failed to web socket");
     }
 
+    // init engine
     engine.setup();
 }
 
@@ -87,4 +89,5 @@ void processControlInput()
 {
     server.handleClient();
     server.handleWebSocket();
+    engine.loop();
 }
