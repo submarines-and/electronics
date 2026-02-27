@@ -6,6 +6,3 @@
 #define SERVO 32
 
 #define WIFI_CONNECTING_FEEDBACK 13
-
-#define TRIGGER 14
-#define ECHO 15

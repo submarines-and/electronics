@@ -13,18 +13,13 @@ void OTA::setup()
     WiFi.mode(WIFI_STA);
     WiFi.begin(WIFI_SSID, WIFI_PASSWORD); // from "config-wifi.h, see readme file for contents"
 
-#ifdef DEBUG
     Serial.println("OTA.setup");
     Serial.print("Connecting to wifi ");
     Serial.print(WIFI_SSID);
     Serial.print(" ");
-#endif
 
     while (WiFi.status() != WL_CONNECTED) {
-
-#ifdef DEBUG
         Serial.print(".");
-#endif
 
         // blink build in led while connecting to wifi
         digitalWrite(WIFI_CONNECTING_FEEDBACK, HIGH);
@@ -33,15 +28,8 @@ void OTA::setup()
         delay(500);
     }
 
-#ifdef DEBUG
     Serial.println("Connected!");
     Serial.println(WiFi.localIP());
-#endif
-
-    // redirect on root
-    server.on("/", [this]() {
-        server.send(200, "text/plain", "/update");
-    });
 
     ElegantOTA.begin(&server);
     server.begin();

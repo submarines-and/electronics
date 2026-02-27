@@ -44,5 +44,6 @@ Depending on lego model and gearbox setup, you will need 1-4 DC motors and at le
 - https://www.youtube.com/watch?v=zibtKRgKjVU
 - https://github.com/ayushsharma82/ElegantOTA/blob/master/platformio_upload.py
 - https://www.build-electronic-circuits.com/arduino-ultrasonic-sensor-hc-sr04/
+- https://esp32io.com/tutorials/esp32-controls-car-via-web
 
 ![Lego model](./img/prototype.jpeg)

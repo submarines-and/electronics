@@ -5,8 +5,6 @@ class Engine {
 
 private:
     Servo servo;
-    int currentDirection = 1;
-    bool isDriving = false;
 
 public:
     void setup();

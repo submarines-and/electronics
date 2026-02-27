@@ -4,9 +4,7 @@
 
 void Engine::setup()
 {
-#ifdef DEBUG
     Serial.println("Engine.setup");
-#endif
 
     pinMode(AIN1, OUTPUT);
     pinMode(AIN2, OUTPUT);
@@ -28,16 +26,8 @@ void Engine::setup()
  */
 void Engine::drive(int direction)
 {
-    if (isDriving && direction == currentDirection) {
-        return;
-    }
-
-#ifdef DEBUG
     Serial.print("Engine.drive, direction: ");
     Serial.println(direction);
-#endif
-
-    currentDirection = direction;
 
     // turn of the other direction
     digitalWrite(direction == -1 ? AIN1 : AIN2, LOW);
@@ -47,8 +37,6 @@ void Engine::drive(int direction)
         analogWrite(direction == -1 ? AIN2 : AIN1, duty_cycle);
         delay(10);
     }
-
-    isDriving = true;
 }
 
 /**
@@ -60,10 +48,8 @@ void Engine::drive(int direction)
  */
 void Engine::turn(int direction)
 {
-#ifdef DEBUG
     Serial.print("Engine.turn ");
     Serial.println(direction);
-#endif
 
     int degrees = 90;
 
@@ -77,12 +63,10 @@ void Engine::turn(int direction)
         degrees = 180 - offset;
     }
 
-#ifdef DEBUG
     Serial.print("Engine.turn, direction: ");
     Serial.print(direction);
     Serial.print(", degrees (speed):");
     Serial.println(degrees);
-#endif
 
     // turn and wait for turn to complete
     servo.write(degrees);
@@ -94,14 +78,12 @@ void Engine::turn(int direction)
 
 void Engine::stop()
 {
-#ifdef DEBUG
     Serial.println("Engine.stop");
-#endif
+
     // ramp speed down
     for (int duty_cycle = 255; duty_cycle >= 0; duty_cycle--) {
-        analogWrite(currentDirection == -1 ? AIN2 : AIN1, duty_cycle);
+        analogWrite(AIN1, duty_cycle);
+        analogWrite(AIN2, duty_cycle);
         delay(10);
     }
-
-    isDriving = false;
 }
