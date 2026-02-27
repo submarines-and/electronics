@@ -23,7 +23,6 @@ Flash first time using env:usb, then you can upload using ota by setting ip in p
 | Lego Technic 8032 | https://www.bricklink.com/v2/catalog/catalogitem.page?S=8032-1#T=S&O={%22iconly%22:0}     |
 | Adafruit feather v2 | https://www.electrokit.com/en/adafruit-esp32-feather-v2 |
 | Adafruit DRV8833 | https://www.amazon.se/-/en/Adafruit-DRV8833-Stepper-Driver-Breakout/dp/B01MFE1CZU |
-| HC-SR04 ultrasound sensor (3v) | https://shop.pchbutik.se/sv/sensor-givare/1654-kompatibel-med-hc-sr04-33-till-5-volt-passar-aruino.html |
 | 3.7v LiPo battery (for feather) | https://www.electrokit.com/en/batteri-lipo-3.7v-2000mah |
 | 6v worth of AA batteries (for motor) | https://www.electrokit.com/en/batterihallare-4xaa-box-brytare-sladd |
 
@@ -43,7 +42,6 @@ Depending on lego model and gearbox setup, you will need 1-4 DC motors and at le
 - https://docs.elegantota.pro/getting-started/integration
 - https://www.youtube.com/watch?v=zibtKRgKjVU
 - https://github.com/ayushsharma82/ElegantOTA/blob/master/platformio_upload.py
-- https://www.build-electronic-circuits.com/arduino-ultrasonic-sensor-hc-sr04/
 - https://esp32io.com/tutorials/esp32-controls-car-via-web
 - https://learn.adafruit.com/adafruit-drv8833-dc-stepper-motor-driver-breakout-board/arduino-dc-motor
 
