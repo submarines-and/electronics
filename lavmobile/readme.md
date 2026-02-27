@@ -14,7 +14,6 @@ Create `config-wifi.h` under src with contents:
 #define WIFI_PASSWORD "<PASSWORD>"
 ```
 
-Flash first time using env:usb, then you can upload using ota by setting ip in platformio.ini.
 
 ## Parts
 

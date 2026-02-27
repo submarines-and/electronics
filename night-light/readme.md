@@ -1,14 +1,12 @@
 # Night light
 I wanted some motion activated lights for when I fetch a tool late at night and I don't want to turn on the lights in my office. Ikea sells led-strips that can be controlled through trådfri, but I figured I could make it myself instead as a fun project.
 
-In my case, an LED filament is used as a light source, but that can of course be substituted.
-
-Project comes with two build configurations in `platformio.ini`, one for debug used directly with an esp8266, the other for prod which is written to the ATTiny. Programmed [using an ESP8266](https://github.com/submarines-and/electronics/tree/master/avr-isp). 
+In my case, an LED filament is used as a light source, but that can of course be substituted. I use an esp32 for OTA updates, but any microcontroller will work. An Attiny85 is tempting, but since the LED takes a lot of power, you would need a DC power module, at which point you are nearing an ESP32 in price so you might as well use that.
 
 ## Parts
 | Part    | Link |
 | -------- | ------- |
-| ATTiny85 | https://www.electrokit.com/en/attiny85-20pu-dip-8-8-bit-mcu-flash-8k     |
+| Any microcontroller | https://www.electrokit.com/en/esp32-c3-mini-development-board-with-headers |
 | LED filament 3v | https://www.electrokit.com/en/flexibelt-led-filament-3v-300mm-varmvit |
 | Motion sensor (PIR) | https://www.electrokit.com/en/rorelsedetektor-pir-mini-sr602 |
 | Photo resistor | https://www.electrokit.com/en/fotomotstand-cds-4-7-kohm |

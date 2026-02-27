@@ -1,19 +1,24 @@
-#ifdef DEBUG
-#define TX_PIN PB2 // physical 7
-#include <ATtinySerialOut.hpp>
-#endif
-
 #include <Arduino.h>
 
-// pin config
-#define MOTION_INPUT_PIN A3   // physical 2
-#define DAYLIGHT_INPUT_PIN A2 // physical 3
-#define LIGHT_OUTPUT_PIN PB1  // physical 6
+/**
+    ESP32
+    https://www.waveshare.com/wiki/ESP32-C3-Zero
+    https://files.waveshare.com/wiki/ESP32-C3-Zero/esp32-c3_datasheet_en.pdf
+*/
+
+// analog
+#define DAYLIGHT_INPUT_PIN 1
+
+// digital
+#define MOTION_INPUT_PIN 4
+#define LIGHT_OUTPUT_PIN 5
 
 void setup()
 {
 #ifdef DEBUG
-    initTXPin();
+    Serial.begin(115200);
+    while (!Serial) {
+    }
 #endif
 
     pinMode(LIGHT_OUTPUT_PIN, OUTPUT);
