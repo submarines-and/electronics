@@ -50,11 +50,11 @@ void onWebSocketMessage(net::WebSocket& ws, const net::WebSocket::DataType dataT
         break;
 
     case CMD_LEFT:
-        engine.turn(1);
+        engine.turn(-1);
         break;
 
     case CMD_RIGHT:
-        engine.turn(-1);
+        engine.turn(1);
         break;
 
     default:

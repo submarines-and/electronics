@@ -29,13 +29,15 @@ void Engine::drive(int direction)
     Serial.print("Engine.drive, direction: ");
     Serial.println(direction);
 
-    // turn of the other direction
-    digitalWrite(direction == -1 ? AIN1 : AIN2, LOW);
-
-    // ramp speed up
-    for (int duty_cycle = 0; duty_cycle < 256; duty_cycle++) {
-        analogWrite(direction == -1 ? AIN2 : AIN1, duty_cycle);
-        delay(10);
+    if (direction == 1) {
+        // forward
+        digitalWrite(AIN1, HIGH);
+        digitalWrite(AIN2, LOW);
+    }
+    else {
+        // reverse
+        digitalWrite(AIN1, LOW);
+        digitalWrite(AIN2, HIGH);
     }
 }
 
@@ -70,7 +72,7 @@ void Engine::turn(int direction)
 
     // turn and wait for turn to complete
     servo.write(degrees);
-    delay(500);
+    delay(200);
 
     // stop
     servo.write(90);
@@ -79,11 +81,6 @@ void Engine::turn(int direction)
 void Engine::stop()
 {
     Serial.println("Engine.stop");
-
-    // ramp speed down
-    for (int duty_cycle = 255; duty_cycle >= 0; duty_cycle--) {
-        analogWrite(AIN1, duty_cycle);
-        analogWrite(AIN2, duty_cycle);
-        delay(10);
-    }
+    digitalWrite(AIN1, LOW);
+    digitalWrite(AIN2, LOW);
 }
