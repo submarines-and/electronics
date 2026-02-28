@@ -4,11 +4,11 @@
 #include <WiFi.h>
 #include <WiFiClient.h>
 
-#define WIFI_CONNECTING_FEEDBACK 10
+#define FEEDBACK_LED 10
 
 void OTA::setup()
 {
-    pinMode(WIFI_CONNECTING_FEEDBACK, OUTPUT);
+    pinMode(FEEDBACK_LED, OUTPUT);
 
     WiFi.mode(WIFI_STA);
     WiFi.begin(WIFI_SSID, WIFI_PASSWORD); // from "config-wifi.h, see readme file for contents"
@@ -22,9 +22,10 @@ void OTA::setup()
         Serial.print(".");
 
         // blink build in led while connecting to wifi
-        digitalWrite(WIFI_CONNECTING_FEEDBACK, HIGH);
+        rgbLedWrite(FEEDBACK_LED, 64, 0, 0);
         delay(500);
-        digitalWrite(WIFI_CONNECTING_FEEDBACK, LOW);
+
+        rgbLedWrite(FEEDBACK_LED, 0, 0, 0);
         delay(500);
     }
 
