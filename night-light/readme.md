@@ -13,9 +13,7 @@ In my case, an LED filament is used as a light source, but that can of course be
 | 10k Ohm resistor  | https://www.electrokit.com/en/motstand-2w-10kohm-510k    |
 | 82 Ohm Resistor    | https://www.electrokit.com/en/motstand-1w-582ohm-82r    |
 | 100uF Capacitor | https://www.electrokit.com/en/el.lyt-100uf-16v-105c-6.3x5mm |
-| On/Off switch | https://www.electrokit.com/en/skjutomkopplare-1-pol-on-on-pcb-2.54mm-2 |
-| Battery holder 2032 | https://www.electrokit.com/en/batterihallare-cr2016/2025/2032-plast |
-| Experiment card for soldering | https://www.electrokit.com/en/experimentkort-70x50mm-pertinax |
+| Experiment card for soldering | https://www.electrokit.com/en/experimentkort-1-hal-40x60mm-genomplaterade-hal |
 
 Split voltage for photo resistor will vary based on which other resistor value is used to ground. If you use other parts, adjust `lightValue` in code so it makes sense.
 
