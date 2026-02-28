@@ -1,3 +1,4 @@
+#include "ota.h"
 #include <Arduino.h>
 
 /**
@@ -6,12 +7,14 @@
     https://files.waveshare.com/wiki/ESP32-C3-Zero/esp32-c3_datasheet_en.pdf
 */
 
+OTA ota;
+
 // analog
-#define DAYLIGHT_INPUT_PIN 1
+#define DAYLIGHT_INPUT_PIN 3
 
 // digital
-#define MOTION_INPUT_PIN 4
-#define LIGHT_OUTPUT_PIN 5
+#define MOTION_INPUT_PIN 8
+#define LIGHT_OUTPUT_PIN 6
 
 void setup()
 {
@@ -19,6 +22,8 @@ void setup()
     Serial.begin(115200);
     while (!Serial) {
     }
+#else
+    ota.setup();
 #endif
 
     pinMode(LIGHT_OUTPUT_PIN, OUTPUT);
@@ -26,6 +31,10 @@ void setup()
 
 void loop()
 {
+#if !defined(DEBUG)
+    ota.checkForUpdate();
+#endif
+
     // 1 for motion, 0 for none
     int motionValue = digitalRead(MOTION_INPUT_PIN);
 

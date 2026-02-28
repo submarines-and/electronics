@@ -15,9 +15,6 @@
 		{
 			"name": "plant-watcher",
 			"path": "plant-watcher"
-		},
-		{
-			"path": "lavmobile"
 		}
 	],
 	"settings": {}
