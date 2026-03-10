@@ -16,6 +16,9 @@ OTA ota;
 #define MOTION_INPUT_PIN 8
 #define LIGHT_OUTPUT_PIN 6
 
+// trigger point
+#define THRESHOLD 200
+
 void setup()
 {
 #ifdef DEBUG
@@ -43,7 +46,7 @@ void loop()
     int lightValue = analogRead(DAYLIGHT_INPUT_PIN);
 
     // enable light if motion + darkness
-    if (motionValue == HIGH && lightValue < 100) {
+    if (motionValue == HIGH && lightValue < THRESHOLD) {
         digitalWrite(LIGHT_OUTPUT_PIN, HIGH);
 
         // delay for an on-duration in prod
