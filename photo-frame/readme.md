@@ -12,4 +12,4 @@ E-ink display that shows a random picture from apple photos. An apple shortcut i
 ## References
 * https://www.waveshare.com/wiki/E-Paper_ESP32_Driver_Board
 * https://github.com/jeff-makes/parkpal/tree/main
-* https://javl.github.io/image2cpp
+* https://github.com/javl/image2cpp/blob/main/index.html
