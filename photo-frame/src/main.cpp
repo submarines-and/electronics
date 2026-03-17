@@ -1,4 +1,5 @@
 #include "gfx.h"
+#include "img.h"
 #include <Fonts/FreeSans12pt7b.h>
 
 void setup()
@@ -7,12 +8,12 @@ void setup()
     while (!Serial) {
     }
 
-    initDisplay();
+    initDisplay(3);
 
     do {
         display.fillScreen(GxEPD_WHITE);
-        drawText(BORDER_MARGIN, BORDER_MARGIN + 40, "Black text", &FreeSans12pt7b, GxEPD_BLACK);
-        drawText(BORDER_MARGIN, BORDER_MARGIN + 80, "Red text", &FreeSans12pt7b, GxEPD_RED);
+        display.drawBitmap(0, 0, epd_bitmap_IMG_0603, 528, 880, GxEPD_BLACK);
+
     } while (display.nextPage());
 }
 

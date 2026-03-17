@@ -12,16 +12,18 @@ using Panel = GxEPD2_750c_Z90;
 const uint16_t PAGE_H = 64;
 GxEPD2_3C<Panel, PAGE_H> display(Panel(EPD_CS, EPD_DC, EPD_RST, EPD_BUSY));
 
-// Global margin
-const int16_t BORDER_MARGIN = 75;
-
-// run once to init
-void initDisplay()
+/**
+ * Run to init display
+ *
+ * Resolution ：528(H)x880(V) Pixel
+ * Rotation (according to current frame mount): 3 = portrait, 4 = landscape
+ */
+void initDisplay(int16_t rotation)
 {
     pinMode(0, INPUT_PULLUP);
     SPI.begin(EPD_SCK, -1, EPD_MOSI, EPD_CS);
     display.init(0, true, 2, false);
-    display.setRotation(4);
+    display.setRotation(rotation);
 }
 
 void drawText(int16_t x, int16_t y, const String& s, const GFXfont* f, uint16_t color)
@@ -90,12 +92,12 @@ void drawDegreeMark(int16_t cx, int16_t cy, int16_t outerR, uint16_t color)
         display.fillCircle(cx, cy, innerR, GxEPD_WHITE);
 }
 
-void drawCenterLine(int16_t baselineY, const String& s, const GFXfont* f, uint16_t color)
+void drawCenterLine(int16_t baselineY, const String& s, const GFXfont* f, uint16_t color, int16_t borderMargin)
 {
     display.setFont(f);
     int16_t x1, y1;
     uint16_t w, h;
-    int16_t availableWidth = display.width() - 2 * BORDER_MARGIN;
+    int16_t availableWidth = display.width() - 2 * borderMargin;
     String clipped_s = clipToWidth(s, f, availableWidth, false);
     display.getTextBounds(clipped_s, 0, 0, &x1, &y1, &w, &h);
     int16_t x = (display.width() - (int16_t)w) / 2;
@@ -113,12 +115,12 @@ int16_t lineHeight(const GFXfont* f)
     return (int16_t)h + 6;
 }
 
-void renderMessage(const String& msg, const GFXfont* font)
+void renderMessage(const String& msg, const GFXfont* font, int16_t borderMargin)
 {
     display.setFullWindow();
     display.firstPage();
     do {
         display.fillScreen(GxEPD_WHITE);
-        drawCenterLine(display.height() / 2, msg, font, GxEPD_BLACK);
+        drawCenterLine(display.height() / 2, msg, font, GxEPD_BLACK, borderMargin);
     } while (display.nextPage());
 }
