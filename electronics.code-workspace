@@ -11,6 +11,10 @@
 		{
 			"name": "night-light",
 			"path": "night-light"
+		},
+		{
+			"name": "photo-frame",
+			"path": "photo-frame"
 		}
 	],
 	"settings": {}
