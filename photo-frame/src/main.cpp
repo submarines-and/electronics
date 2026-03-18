@@ -5,7 +5,6 @@
 #include <Fonts/FreeSans12pt7b.h>
 #include <WiFi.h>
 
-// http://192.168.176.177
 AsyncWebServer server(80);
 QueueHandle_t longOperationQueue;
 
@@ -71,7 +70,6 @@ void setup()
                           Serial.printf("Allocating buffer of %u bytes\n", size);
                           uint8_t* buffer = new (std::nothrow) uint8_t[size];
                           if (!buffer) {
-                              // not enough memory
                               Serial.println("Out of memory!");
                               request->abort();
                               return;
@@ -100,7 +98,6 @@ void setup()
               });
 
     server.begin();
-    Serial.println("Waiting for image!");
 }
 
 void loop()
@@ -111,9 +108,8 @@ void loop()
             Serial.println("Processing entry in image queue...");
 
             do {
-                display.fillScreen(GxEPD_WHITE);
-                //      display.drawBitmap(0, 0, request->_tempObject, 528, 880, GxEPD_BLACK);
-                drawText(70, 100, "Meanwhile in Vienna", &FreeSans12pt7b, GxEPD_RED);
+                display.fillScreen(GxEPD_BLACK);
+                display.drawBitmap(0, 0, reinterpret_cast<uint8_t*>(request->_tempObject), 528, 880, GxEPD_WHITE);
             } while (display.nextPage());
         }
     }
