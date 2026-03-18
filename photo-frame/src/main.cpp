@@ -3,6 +3,7 @@
 #include <AsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 #include <Fonts/FreeSans12pt7b.h>
+#include <SPIFFS.h>
 #include <WiFi.h>
 
 AsyncWebServer server(80);
@@ -13,6 +14,13 @@ void setup()
 
     Serial.begin(9600);
     while (!Serial) {
+    }
+
+    Serial.println("");
+    Serial.println("Mounting file system...");
+    if (!SPIFFS.begin(true)) {
+        Serial.println("File system mount Failed");
+        return;
     }
 
     // init display early for debug messages
@@ -32,62 +40,28 @@ void setup()
     }
 
     Serial.println(WiFi.localIP());
-    longOperationQueue = xQueueCreate(10, sizeof(AsyncWebServerRequest*));
+    longOperationQueue = xQueueCreate(10, sizeof(String*));
 
     // curl -v -F "data=@/Users/submarines/Downloads/x.bmp" http://192.168.176.177/upload
-    server.on("/upload", HTTP_POST, [](AsyncWebServerRequest* request) {
-        // response already set ?
-        if (request->getResponse()) {
-            // 400 No Content-Length
-            return;
-        }
-
-        // nothing uploaded ?
-        if (!request->_tempObject) {
-            return request->send(400, "text/plain", "Nothing uploaded");
-        }
-
-        uint8_t* buffer = reinterpret_cast<uint8_t*>(request->_tempObject);
-        // process the buffer
-
-        delete buffer;
-        request->_tempObject = nullptr;
-
-        request->send(200, "text/plain", "OK");
-        //
-    },
-              [](AsyncWebServerRequest* request, String filename, size_t index, uint8_t* data, size_t len, bool final) {
+    server.on("/upload", HTTP_POST, [](AsyncWebServerRequest* request) { request->send(200, "text/plain", "OK"); }, [](AsyncWebServerRequest* request, String filename, size_t index, uint8_t* data, size_t len, bool final) {
                   Serial.printf("Upload[%s]: start=%u, len=%u, final=%d\n", filename.c_str(), index, len, final);
 
-                  // first pass ?
+        // open the file on first call and store the file handle in the request object
                   if (!index) {
-                      // Note: using content type to determine size is not reliable!
-                      size_t size = request->header("Content-Length").toInt();
-                      if (!size) {
-                          request->send(400, "text/plain", "No Content-Length");
-                      }
-                      else {
-                          Serial.printf("Allocating buffer of %u bytes\n", size);
-                          uint8_t* buffer = new (std::nothrow) uint8_t[size];
-                          if (!buffer) {
-                              Serial.println("Out of memory!");
-                              request->abort();
-                              return;
-                          }
-
-                          request->_tempObject = buffer;
-                      }
+            request->_tempFile = SPIFFS.open("/" + filename, "w");
                   }
 
+        // stream the incoming chunk to the opened file
                   if (len) {
-                      memcpy(reinterpret_cast<uint8_t*>(request->_tempObject) + index, data, len);
+            request->_tempFile.write(data, len);
                   }
 
                   if (final) {
                       Serial.printf("UploadEnd: %s, %u B\n", filename.c_str(), index + len);
+            request->_tempFile.close();
 
                       // flag for later procesing of new image
-                      if (xQueueSend(longOperationQueue, (void*)&request, (TickType_t)10) != pdPASS) {
+            if (xQueueSend(longOperationQueue, (void*)&filename, (TickType_t)10) != pdPASS) {
                           request->send(500);
                       }
                       else {
@@ -98,19 +72,43 @@ void setup()
               });
 
     server.begin();
+
+    /*
+    do {
+        display.fillScreen(GxEPD_BLACK);
+        display.drawBitmap(0, 0, epd_bitmap_, 528, 880, GxEPD_WHITE);
+    } while (display.nextPage());
+    */
+
+    Serial.println("Ready!");
 }
 
 void loop()
 {
     if (uxQueueMessagesWaiting(longOperationQueue)) {
-        AsyncWebServerRequest* request;
-        if (xQueueReceive(longOperationQueue, &(request), (TickType_t)10)) {
+        String* filename;
+        if (xQueueReceive(longOperationQueue, &(filename), (TickType_t)10)) {
             Serial.println("Processing entry in image queue...");
+
+            File file = SPIFFS.open("/x.bmp", "r");
+            size_t size = file.size();
+            uint8_t* buffer = (uint8_t*)malloc(size);
+
+            if (buffer) {
+                file.read(buffer, size);
+                Serial.printf("Read %u bytes successfully\n", size);
 
             do {
                 display.fillScreen(GxEPD_BLACK);
-                display.drawBitmap(0, 0, reinterpret_cast<uint8_t*>(request->_tempObject), 528, 880, GxEPD_WHITE);
+                    display.drawBitmap(0, 0, buffer, 528, 880, GxEPD_WHITE);
             } while (display.nextPage());
+
+                free(buffer);
+                Serial.println("Done!");
+            }
+            else {
+                Serial.println("Failed to allocate memory for buffer");
+            }
         }
     }
 }
