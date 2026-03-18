@@ -10,6 +10,8 @@ E-ink display that shows a random picture from apple photos. An apple shortcut i
 
 
 ## References
-* https://www.waveshare.com/wiki/E-Paper_ESP32_Driver_Board
-* https://github.com/jeff-makes/parkpal/tree/main
-* https://github.com/javl/image2cpp/blob/main/index.html
+- https://www.waveshare.com/wiki/E-Paper_ESP32_Driver_Board
+- https://github.com/jeff-makes/parkpal/tree/main
+- https://github.com/javl/image2cpp/blob/main/index.html
+- https://github.com/ayushsharma82/ElegantOTA/blob/master/examples/AsyncDemo/AsyncDemo.ino
+- https://github.com/Rudranil-Sarkar/Floyd-Steinberg-dithering-algo/tree/master
