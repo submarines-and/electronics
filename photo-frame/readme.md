@@ -20,3 +20,4 @@ E-ink display that shows a random picture from apple photos. An apple shortcut+i
 - https://github.com/Rudranil-Sarkar/Floyd-Steinberg-dithering-algo/tree/master
 - https://learn.adafruit.com/preparing-graphics-for-e-ink-displays/command-line
 - https://github.com/ESP32Async/ESPAsyncWebServer/blob/main/examples/Upload/Upload.ino
+- https://github.com/Rudranil-Sarkar/Floyd-Steinberg-dithering-algo/blob/master/bitmap.cpp
