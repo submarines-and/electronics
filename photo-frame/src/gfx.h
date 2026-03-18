@@ -141,17 +141,23 @@ uint32_t read32(File& f)
 
 void drawFromFile(const char* filename)
 {
+    Serial.print("Rendering...");
+
     display.setFullWindow();
     display.firstPage();
     do {
+        Serial.print(".");
+
         File file = SPIFFS.open(filename, "r");
         if (!file) {
+            Serial.println("");
             Serial.println("File does not exist");
             return;
         }
 
         // 1. Skip BMP Header (14 bytes) and DIB Header (at least 40 bytes)
         if (read16(file) != 0x4D42) {
+            Serial.println("");
             Serial.println("Not a bmp file");
             file.close();
             return;
@@ -203,4 +209,6 @@ void drawFromFile(const char* filename)
 
         file.close();
     } while (display.nextPage());
+
+    Serial.println("");
 }

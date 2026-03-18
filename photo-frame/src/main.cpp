@@ -99,6 +99,7 @@ void loop()
         if (xQueueReceive(longOperationQueue, &(filename), (TickType_t)10)) {
             Serial.println("Processing entry in image queue...");
             drawFromFile("/tmp.bmp");
+            Serial.println("Done!");
         }
     }
 }
