@@ -22,6 +22,7 @@ void setup()
         Serial.println("File system mount Failed");
         return;
     }
+    SPIFFS.format();
 
     // init display early for debug messages
     Serial.println("Starting display...");
@@ -48,7 +49,8 @@ void setup()
 
         // open the file on first call and store the file handle in the request object
                   if (!index) {
-            request->_tempFile = SPIFFS.open("/" + filename, "w");
+            SPIFFS.remove("tmp.bmp");
+            request->_tempFile = SPIFFS.open("/tmp.bmp", "w");
                   }
 
         // stream the incoming chunk to the opened file
