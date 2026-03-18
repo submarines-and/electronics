@@ -1,6 +1,9 @@
 # Photo frame
 E-ink display that shows a random picture from apple photos. An apple shortcut+imagemagick is used as glue, sending the image over http.
 
+![prototype](./img/prototype.png)
+![shortcut](./img/shortcut.png)
+
 ## Parts
 | Part    | Link |
 | -------- | ------- |
