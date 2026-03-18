@@ -142,12 +142,13 @@ uint32_t read32(File& f)
 void drawFromFile(const char* filename)
 {
     Serial.print("Rendering...");
-
     display.setFullWindow();
     display.firstPage();
+
     do {
         Serial.print(".");
 
+        // check if file exists
         File file = SPIFFS.open(filename, "r");
         if (!file) {
             Serial.println("");
@@ -155,7 +156,7 @@ void drawFromFile(const char* filename)
             return;
         }
 
-        // 1. Skip BMP Header (14 bytes) and DIB Header (at least 40 bytes)
+        // check if valid file
         if (read16(file) != 0x4D42) {
             Serial.println("");
             Serial.println("Not a bmp file");
@@ -169,14 +170,14 @@ void drawFromFile(const char* filename)
         uint32_t width = read32(file);
         int32_t height = (int32_t)read32(file);
         file.seek(28);
-        uint16_t depth = read16(file); // Bits per pixel (usually 1 or 24)
+        uint16_t depth = read16(file); // Bits per pixel (1 or 24)
 
-        // 2. Setup rendering variables
-        bool flip = (height > 0); // BMPs are usually stored bottom-to-top
+        // bmp stored upside down
+        bool flip = (height > 0);
         uint32_t absHeight = abs(height);
         uint32_t rowSize = (width * depth / 8 + 3) & ~3; // Rows are 4-byte padded
 
-        // 3. Iterate through every pixel
+        // pixel loop
         for (uint32_t i = 0; i < absHeight; i++) {
             uint32_t row = flip ? (absHeight - 1 - i) : i;
             file.seek(offset + (row * rowSize));

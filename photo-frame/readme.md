@@ -1,5 +1,7 @@
 # Photo frame
-E-ink display that shows a random picture from apple photos. An apple shortcut+imagemagick is used as glue, sending the image over http.
+E-ink display that shows a random picture from apple photos.
+
+To upload an image, either use curl `curl -v -F "data=@/path/to/file.bmp" http://ip.to.server/upload`or use an apple shortcut - see print screen below for inspiration.
 
 ![prototype](./img/prototype.png)
 ![shortcut](./img/shortcut.png)

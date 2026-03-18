@@ -11,17 +11,17 @@ QueueHandle_t longOperationQueue;
 
 void setup()
 {
-
     Serial.begin(9600);
     while (!Serial) {
     }
 
-    Serial.println("");
     Serial.println("Mounting file system...");
     if (!SPIFFS.begin(true)) {
-        Serial.println("File system mount Failed");
+        Serial.println("File system mount failed");
         return;
     }
+
+    // erase all files
     SPIFFS.format();
 
     // init display early for debug messages
@@ -41,28 +41,31 @@ void setup()
     }
 
     Serial.println(WiFi.localIP());
+
+    // setup queue for later batch processing
     longOperationQueue = xQueueCreate(10, sizeof(String*));
 
     // curl -v -F "data=@/Users/submarines/Downloads/x.bmp" http://192.168.176.177/upload
     server.on("/upload", HTTP_POST, [](AsyncWebServerRequest* request) { request->send(200, "text/plain", "OK"); }, [](AsyncWebServerRequest* request, String filename, size_t index, uint8_t* data, size_t len, bool final) {
         Serial.printf("Upload[%s]: start=%u, len=%u, final=%d\n", filename.c_str(), index, len, final);
 
-        // open the file on first call and store the file handle in the request object
+        // first cycle = create and open file
         if (!index) {
-            SPIFFS.remove("tmp.bmp");
+            SPIFFS.remove("/tmp.bmp");
             request->_tempFile = SPIFFS.open("/tmp.bmp", "w");
         }
 
-        // stream the incoming chunk to the opened file
+        // append current round of bytes to file
         if (len) {
             request->_tempFile.write(data, len);
         }
 
+        // all done
         if (final) {
             Serial.printf("UploadEnd: %s, %u B\n", filename.c_str(), index + len);
             request->_tempFile.close();
 
-            // flag for later procesing of new image
+            // flag for later procesing of new image (handled in loop function)
             if (xQueueSend(longOperationQueue, (void*)&filename, (TickType_t)10) != pdPASS) {
                 request->send(500);
             }
@@ -74,26 +77,19 @@ void setup()
     });
 
     /*
-    // Debug echo file
+    // Debug echo file endpoint
     server.on("/download", HTTP_GET, [](AsyncWebServerRequest* request) {
         request->send(SPIFFS, "/tmp.bmp", "img/bmp");
     });
     */
 
     server.begin();
-
-    /*
-    do {
-        display.fillScreen(GxEPD_BLACK);
-        display.drawBitmap(0, 0, epd_bitmap_, 528, 880, GxEPD_WHITE);
-    } while (display.nextPage());
-    */
-
     Serial.println("Ready!");
 }
 
 void loop()
 {
+    // handle queued operations
     if (uxQueueMessagesWaiting(longOperationQueue)) {
         String* filename;
         if (xQueueReceive(longOperationQueue, &(filename), (TickType_t)10)) {
