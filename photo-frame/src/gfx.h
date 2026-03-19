@@ -110,10 +110,7 @@ void drawFromFile(const char* filePath, bool useThreeColors = false)
                     // it still looks pretty bad, but it gives it a very artsy feel
                     if (useThreeColors) {
                         float normalized = gray / 255.0;
-                        gray = (uint8_t)(pow(normalized, 0.5) * 255.0); // Gamma 0.5 makes it much brighter
-
-                        // alt solution to the above
-                        //   gray = constrain(gray + 30, 0, 255); // Boost brightness by 30 points
+                        gray = (uint8_t)(pow(normalized, 0.5) * 255.0); // Gamma 0.5
                     }
                 }
                 else {
@@ -178,6 +175,5 @@ void drawFromFile(const char* filePath, bool useThreeColors = false)
 
     free(currentRowErr);
     free(nextRowErr);
-    Serial.println("");
-    Serial.println("Rendering complete!");
+    Serial.println("\nRendering complete!");
 }
