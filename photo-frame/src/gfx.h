@@ -48,7 +48,7 @@ uint32_t read32(File& f)
     return result;
 }
 
-void drawFromFile(const char* filename)
+void drawFromFile(const char* filePath)
 {
     Serial.print("Rendering...");
     display.setFullWindow();
@@ -58,10 +58,11 @@ void drawFromFile(const char* filename)
         Serial.print(".");
 
         // check if file exists
-        File file = SPIFFS.open(filename, "r");
+        File file = SPIFFS.open(filePath, "r");
         if (!file) {
             Serial.println("");
             Serial.println("File does not exist");
+            Serial.println(filePath);
             return;
         }
 
@@ -69,6 +70,7 @@ void drawFromFile(const char* filename)
         if (read16(file) != 0x4D42) {
             Serial.println("");
             Serial.println("Not a bmp file");
+            Serial.println(filePath);
             file.close();
             return;
         }
