@@ -2,7 +2,7 @@
 #include <GxEPD2_3C.h>
 #include <SPIFFS.h>
 
-//  Pins for e-ink display
+//  pins for e-ink display
 #define EPD_CS 15
 #define EPD_DC 27
 #define EPD_RST 26
@@ -91,6 +91,7 @@ void drawFromFile(const char* filePath, bool useThreeColors = false)
         file = SPIFFS.open(filePath, "r");
 
         for (uint32_t i = 0; i < absHeight; i++) {
+
             // BMPs are bottom-up; read top-down for dither flow
             uint32_t bmpRow = flip ? (absHeight - 1 - i) : i;
             file.seek(offset + (bmpRow * rowSize));
@@ -119,7 +120,7 @@ void drawFromFile(const char* filePath, bool useThreeColors = false)
                     gray = (b_byte & (0x80 >> (j % 8))) ? 255 : 0;
                 }
 
-                // Add existing error to current pixel
+                // dithering
                 int16_t pixelWithErr = gray + currentRowErr[j];
                 uint16_t color;
                 int16_t actualGray;
@@ -145,6 +146,7 @@ void drawFromFile(const char* filePath, bool useThreeColors = false)
                     actualGray = (color == GxEPD_BLACK) ? 0 : 255;
                 }
 
+                // Only draws if pixel is within the current page's Y-range
                 display.drawPixel(j, i, color);
 
                 // Calculate error and diffuse to neighbors

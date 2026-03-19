@@ -25,6 +25,7 @@ void setup()
     }
 
     // erase all files on startup (otherwise it will keep filling up during testing)
+    Serial.println("Erasing all previous image files...");
     SPIFFS.format();
 
     // init display early for debug messages
@@ -50,10 +51,9 @@ void setup()
 
     // curl -v -F "data=@/Users/submarines/Downloads/x.bmp" http://192.168.176.177/upload
     server.on("/upload", HTTP_POST, [](AsyncWebServerRequest* request) { request->send(200, "text/plain", "OK"); }, [](AsyncWebServerRequest* request, String fileName, size_t index, uint8_t* data, size_t len, bool final) {
-        Serial.printf("Upload[%s]: start=%u, len=%u, final=%d\n", fileName, index, len, final);
-
         // first cycle = create and open file
         if (!index) {
+            Serial.printf("Uploading %s...", fileName);
             if (SPIFFS.exists(tmpFilename)) {
                 SPIFFS.remove(tmpFilename);
             }
@@ -64,11 +64,13 @@ void setup()
         // append current round of bytes to file
         if (len) {
             request->_tempFile.write(data, len);
+            Serial.print(".");
         }
 
         // all done
         if (final) {
-            Serial.printf("UploadEnd: %s, %u B\n", fileName, index + len);
+            Serial.println("");
+            Serial.printf("Upload finished: %s, %u B\n", fileName, index + len);
             request->_tempFile.close();
 
             // flag for later procesing of new image (handled in loop function)
@@ -89,8 +91,10 @@ void setup()
     });
     */
 
+    Serial.println("Starting server...");
     server.begin();
-    Serial.println("Ready!");
+
+    Serial.println("Ready to recieve images!");
 }
 
 void loop()
@@ -99,10 +103,10 @@ void loop()
     if (uxQueueMessagesWaiting(longOperationQueue)) {
         const char* filePath;
         if (xQueueReceive(longOperationQueue, &(filePath), (TickType_t)10)) {
-            Serial.println("Processing image from queue: ");
+            Serial.println("Will now switch to new frame image from queue: ");
             drawFromFile(tmpFilename);
             SPIFFS.remove(tmpFilename);
-            Serial.println("Image processed!");
+            Serial.println("Image has been switched!");
         }
     }
 }
