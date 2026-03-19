@@ -10,8 +10,8 @@
 #define EPD_SCK 13
 #define EPD_MOSI 14
 
-/** Init displayed in paged mode (due to lack of ram) */
-GxEPD2_3C<GxEPD2_750c_Z90, 64> display(GxEPD2_750c_Z90(EPD_CS, EPD_DC, EPD_RST, EPD_BUSY));
+//  Init displayed in paged mode (due to lack of ram)
+GxEPD2_3C<GxEPD2_750c_Z90, 128> display(GxEPD2_750c_Z90(EPD_CS, EPD_DC, EPD_RST, EPD_BUSY));
 
 /**
  * Run to init display
