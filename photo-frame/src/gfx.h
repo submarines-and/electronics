@@ -150,7 +150,9 @@ void drawFromFile(const char* filePath, bool useThreeColors = false)
                 // for some reason, the screen is refusing to draw the bottom part of the image
                 // I don't know if this is a memory issue or (more likely) an issue in the rendering code
                 // luckily, if I just offset the rendering slightly so it fits within the passepartout, it looks perfect.
-                int16_t yOffset = 40;
+                // (calc is real height - height left when resizing images from apple photors) / 2
+                // (880 - 704) / 2 = 88
+                int16_t yOffset = 88;
                 display.drawPixel(j, i + yOffset, color);
 
                 // Calculate error and diffuse to neighbors
