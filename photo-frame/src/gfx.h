@@ -50,7 +50,6 @@ uint32_t read32(File& f)
 
 void drawFromFile(const char* filePath, bool useThreeColors = false)
 {
-    Serial.print("Rendering ...");
 
     // Initial file check to get dimensions
     File file = SPIFFS.open(filePath, "r");
@@ -74,15 +73,18 @@ void drawFromFile(const char* filePath, bool useThreeColors = false)
     uint32_t rowSize = (width * depth / 8 + 3) & ~3;
     bool flip = (height > 0);
 
+    Serial.println("File stats:");
+    Serial.printf("Height: %d, Width: %d, Depth: %d \n", absHeight, width, depth);
+
     // Error buffers (2 bytes per pixel width)
     int16_t* currentRowErr = (int16_t*)malloc(width * sizeof(int16_t));
     int16_t* nextRowErr = (int16_t*)malloc(width * sizeof(int16_t));
 
+    Serial.print("Rendering ...");
     display.setFullWindow();
     display.firstPage();
 
     do {
-        Serial.print(".");
 
         // Reset error buffers for each page refresh
         memset(currentRowErr, 0, width * sizeof(int16_t));
@@ -109,6 +111,8 @@ void drawFromFile(const char* filePath, bool useThreeColors = false)
                     if (useThreeColors) {
                         float normalized = gray / 255.0;
                         gray = (uint8_t)(pow(normalized, 0.5) * 255.0); // Gamma 0.5 makes it much brighter
+
+                        // alt solution to the above
                         //   gray = constrain(gray + 30, 0, 255); // Boost brightness by 30 points
                     }
                 }
@@ -125,7 +129,7 @@ void drawFromFile(const char* filePath, bool useThreeColors = false)
                 uint16_t color;
                 int16_t actualGray;
 
-                // 3-Color logic
+                // 3 color logic
                 if (useThreeColors) {
                     if (pixelWithErr < 85) {
                         color = GxEPD_BLACK;
@@ -166,10 +170,14 @@ void drawFromFile(const char* filePath, bool useThreeColors = false)
             memcpy(currentRowErr, nextRowErr, width * sizeof(int16_t));
             memset(nextRowErr, 0, width * sizeof(int16_t));
         }
+
         file.close();
+        Serial.print(".");
+
     } while (display.nextPage());
 
     free(currentRowErr);
     free(nextRowErr);
     Serial.println("");
+    Serial.println("Rendering complete!");
 }
