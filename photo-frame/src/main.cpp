@@ -8,6 +8,8 @@
 
 AsyncWebServer server(80);
 QueueHandle_t longOperationQueue;
+
+/** Use the same file as temp storage when downloading and rendering an image */
 const char* tmpFilename = "/tmp.bmp";
 
 void setup()
@@ -22,7 +24,7 @@ void setup()
         return;
     }
 
-    // erase all files
+    // erase all files on startup (otherwise it will keep filling up during testing)
     SPIFFS.format();
 
     // init display early for debug messages
@@ -97,9 +99,10 @@ void loop()
     if (uxQueueMessagesWaiting(longOperationQueue)) {
         const char* filePath;
         if (xQueueReceive(longOperationQueue, &(filePath), (TickType_t)10)) {
-            Serial.print("Processing entry in image queue: ");
+            Serial.println("Processing image from queue: ");
             drawFromFile(tmpFilename);
-            Serial.println("Done!");
+            SPIFFS.remove(tmpFilename);
+            Serial.println("Image processed!");
         }
     }
 }
