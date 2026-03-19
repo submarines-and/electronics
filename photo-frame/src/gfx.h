@@ -9,9 +9,9 @@
 #define EPD_BUSY 25
 #define EPD_SCK 13
 #define EPD_MOSI 14
-using Panel = GxEPD2_750c_Z90;
-const uint16_t PAGE_H = 64;
-GxEPD2_3C<Panel, PAGE_H> display(Panel(EPD_CS, EPD_DC, EPD_RST, EPD_BUSY));
+
+/** Init displayed in paged mode (due to lack of ram) */
+GxEPD2_3C<GxEPD2_750c_Z90, 64> display(GxEPD2_750c_Z90(EPD_CS, EPD_DC, EPD_RST, EPD_BUSY));
 
 /**
  * Run to init display
@@ -80,7 +80,7 @@ void drawFromFile(const char* filePath, bool useThreeColors = false)
     int16_t* currentRowErr = (int16_t*)malloc(width * sizeof(int16_t));
     int16_t* nextRowErr = (int16_t*)malloc(width * sizeof(int16_t));
 
-    Serial.print("Rendering ...");
+    Serial.print("Rendering...");
     display.setFullWindow();
     display.firstPage();
 
