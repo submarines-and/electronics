@@ -151,7 +151,7 @@ void drawFromFile(const char* filePath, bool useThreeColors = false)
                 // I don't know if this is a memory issue or (more likely) an issue in the rendering code
                 // luckily, I can center the image for it to look better, sometimes it even fits inside of the passepartout, in my case approx 750px tall.
                 // calc is (display height - image height post resize) / 2
-                int16_t yOffset = 88;
+                int16_t yOffset = (GxEPD2_750c_Z90::WIDTH - absHeight) / 2; //::WIDTH used because frame is sideways
                 display.drawPixel(j, i + yOffset, color);
 
                 // Calculate error and diffuse to neighbors
