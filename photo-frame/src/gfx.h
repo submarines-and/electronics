@@ -147,8 +147,11 @@ void drawFromFile(const char* filePath, bool useThreeColors = false)
                     actualGray = (color == GxEPD_BLACK) ? 0 : 255;
                 }
 
-                // Only draws if pixel is within the current page's Y-range
-                display.drawPixel(j, i, color);
+                // for some reason, the screen is refusing to draw the bottom part of the image
+                // I don't know if this is a memory issue or (more likely) an issue in the rendering code
+                // luckily, if I just offset the rendering slightly so it fits within the passepartout, it looks perfect.
+                int16_t yOffset = 40;
+                display.drawPixel(j, i + yOffset, color);
 
                 // Calculate error and diffuse to neighbors
                 int16_t err = pixelWithErr - actualGray;
