@@ -103,7 +103,7 @@ void loop()
     if (uxQueueMessagesWaiting(longOperationQueue)) {
         const char* filePath;
         if (xQueueReceive(longOperationQueue, &(filePath), (TickType_t)10)) {
-            Serial.println("Will now switch to new frame image from queue: ");
+            Serial.println("Will now switch to new image from queue...");
             drawFromFile(tmpFilename);
             SPIFFS.remove(tmpFilename);
             Serial.println("Image has been switched!");
