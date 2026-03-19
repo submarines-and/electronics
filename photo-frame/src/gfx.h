@@ -48,7 +48,7 @@ uint32_t read32(File& f)
     return result;
 }
 
-oid drawFromFile(const char* filePath)
+void drawFromFile(const char* filePath, bool useThreeColors = false)
 {
     Serial.print("Rendering ...");
 
@@ -102,6 +102,14 @@ oid drawFromFile(const char* filePath)
                     uint8_t g = file.read();
                     uint8_t r = file.read();
                     gray = (r * 77 + g * 150 + b * 29) >> 8;
+
+                    // increase brightness when using 3 colors
+                    // it still looks pretty bad, but it gives it a very artsy feel
+                    if (useThreeColors) {
+                        float normalized = gray / 255.0;
+                        gray = (uint8_t)(pow(normalized, 0.5) * 255.0); // Gamma 0.5 makes it much brighter
+                        //   gray = constrain(gray + 30, 0, 255); // Boost brightness by 30 points
+                    }
                 }
                 else {
                     // 1-bit logic: treat as 0 or 255
@@ -113,10 +121,29 @@ oid drawFromFile(const char* filePath)
 
                 // Add existing error to current pixel
                 int16_t pixelWithErr = gray + currentRowErr[j];
+                uint16_t color;
+                int16_t actualGray;
 
-                // Threshold to Black or White
-                uint16_t color = (pixelWithErr < 128) ? GxEPD_BLACK : GxEPD_WHITE;
-                int16_t actualGray = (color == GxEPD_BLACK) ? 0 : 255;
+                // 3-Color logic
+                if (useThreeColors) {
+                    if (pixelWithErr < 85) {
+                        color = GxEPD_BLACK;
+                        actualGray = 0;
+                    }
+                    else if (pixelWithErr < 170) {
+                        color = GxEPD_RED;
+                        actualGray = 127; // Mid-point target for Red
+                    }
+                    else {
+                        color = GxEPD_WHITE;
+                        actualGray = 255;
+                    }
+                }
+                else {
+                    // Threshold to Black or White
+                    color = (pixelWithErr < 128) ? GxEPD_BLACK : GxEPD_WHITE;
+                    actualGray = (color == GxEPD_BLACK) ? 0 : 255;
+                }
 
                 display.drawPixel(j, i, color);
 

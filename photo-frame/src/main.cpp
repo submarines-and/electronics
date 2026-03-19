@@ -50,7 +50,7 @@ void setup()
 
     // curl -v -F "data=@/Users/submarines/Downloads/x.bmp" http://192.168.176.177/upload
     server.on("/upload", HTTP_POST, [](AsyncWebServerRequest* request) { request->send(200, "text/plain", "OK"); }, [](AsyncWebServerRequest* request, String fileName, size_t index, uint8_t* data, size_t len, bool final) {
-        Serial.printf("Upload[%s]: start=%u, len=%u, final=%d\n", tmpFilename, index, len, final);
+        Serial.printf("Upload[%s]: start=%u, len=%u, final=%d\n", fileName, index, len, final);
 
         // first cycle = create and open file
         if (!index) {
@@ -68,7 +68,7 @@ void setup()
 
         // all done
         if (final) {
-            Serial.printf("UploadEnd: %s, %u B\n", tmpFilename, index + len);
+            Serial.printf("UploadEnd: %s, %u B\n", fileName, index + len);
             request->_tempFile.close();
 
             // flag for later procesing of new image (handled in loop function)
