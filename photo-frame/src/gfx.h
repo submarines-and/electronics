@@ -48,7 +48,7 @@ uint32_t read32(File& f)
     return result;
 }
 
-void drawFromFile(const char* filePath)
+void drawFromFile(const char* filePath, bool colorCount = 2)
 {
     Serial.print("Rendering...");
     display.setFullWindow();
@@ -103,12 +103,23 @@ void drawFromFile(const char* filePath)
                     // convert RGB value to greyscale
                     uint8_t greyValue = (uint8_t)((r * 77 + g * 150 + b * 29) >> 8);
 
-                    // select color based on arbitrary range
-                    if (greyValue < 86) {
-                        color = GxEPD_BLACK;
-                }
-                    else if (greyValue < 171) {
-                        color = GxEPD_RED;
+                    if (colorCount == 3) {
+                        // select color based on arbitrary range for 3 color
+                        if (greyValue < 86) {
+                            color = GxEPD_BLACK;
+                        }
+                        else if (greyValue < 171) {
+                            color = GxEPD_RED;
+                        }
+                    }
+                    else {
+                        // split 50/50 for 2 color
+                        if (greyValue < 128) {
+                            color = GxEPD_BLACK;
+                        }
+                        else {
+                            color = GxEPD_WHITE;
+                        }
                     }
                 }
                 else if (depth == 1) {
