@@ -1,7 +1,7 @@
 # Photo frame
 E-ink display that shows a random picture from apple photos.
 
-To upload an image, either use curl `curl -v -F "data=@/path/to/file.bmp" http://ip.to.server/upload` or use an apple shortcut - see print screen below for inspiration.
+To upload an image, either use curl `curl -v -F "data=@/path/to/file.bmp" http://ip.to.server/upload` or use an apple shortcut - see print screen below for inspiration. If you start from apple photos, the resized image will have the wrong proportions. My solution wws to offset the rendered image in code, see `yOffset` in `gfx.h`.
 
 ![prototype](./img/prototype.png)
 ![shortcut](./img/shortcut.png)
