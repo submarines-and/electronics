@@ -47,98 +47,98 @@ uint32_t read32(File& f)
     f.read((uint8_t*)&result, sizeof(result));
     return result;
 }
-
-void drawFromFile(const char* filePath, bool colorCount = 2)
+void drawFromFile(const char* filePath)
 {
-    Serial.print("Rendering...");
+    Serial.print("Rendering ...");
+
+    // Initial file check to get dimensions
+    File file = SPIFFS.open(filePath, "r");
+    if (!file || read16(file) != 0x4D42) {
+        Serial.println("\nFile error");
+        if (file)
+            file.close();
+        return;
+    }
+
+    file.seek(18);
+    uint32_t width = read32(file);
+    int32_t height = (int32_t)read32(file);
+    file.seek(10);
+    uint32_t offset = read32(file);
+    file.seek(28);
+    uint16_t depth = read16(file);
+    file.close();
+
+    uint32_t absHeight = abs(height);
+    uint32_t rowSize = (width * depth / 8 + 3) & ~3;
+    bool flip = (height > 0);
+
+    // Allocate two rows for error diffusion (int16 handles negative errors)
+    int16_t* currentRowErr = (int16_t*)malloc(width * sizeof(int16_t));
+    int16_t* nextRowErr = (int16_t*)malloc(width * sizeof(int16_t));
+
     display.setFullWindow();
     display.firstPage();
 
     do {
         Serial.print(".");
 
-        // check if file exists
-        File file = SPIFFS.open(filePath, "r");
-        if (!file) {
-            Serial.println("");
-            Serial.println("File does not exist");
-            Serial.println(filePath);
-            return;
-        }
+        // Reset error buffers for each page refresh
+        memset(currentRowErr, 0, width * sizeof(int16_t));
+        memset(nextRowErr, 0, width * sizeof(int16_t));
 
-        // check if valid file
-        if (read16(file) != 0x4D42) {
-            Serial.println("");
-            Serial.println("Not a bmp file");
-            Serial.println(filePath);
-            file.close();
-            return;
-        }
+        file = SPIFFS.open(filePath, "r");
 
-        file.seek(10);
-        uint32_t offset = read32(file); // start of pixel data
-        file.seek(18);
-        uint32_t width = read32(file);
-        int32_t height = (int32_t)read32(file);
-        file.seek(28);
-        uint16_t depth = read16(file); // Bits per pixel (1 or 24)
-
-        bool flip = (height > 0); // bmp stored upside down
-        uint32_t absHeight = abs(height);
-        uint32_t rowSize = (width * depth / 8 + 3) & ~3; // each row is 4-byte padded
-
-        // pixel loop
         for (uint32_t i = 0; i < absHeight; i++) {
-            uint32_t row = flip ? (absHeight - 1 - i) : i;
-            file.seek(offset + (row * rowSize));
+            // BMPs are bottom-up; read top-down for dither flow
+            uint32_t bmpRow = flip ? (absHeight - 1 - i) : i;
+            file.seek(offset + (bmpRow * rowSize));
 
             for (uint32_t j = 0; j < width; j++) {
-                uint16_t color = GxEPD_WHITE;
-
+                int16_t gray;
                 if (depth == 24) {
                     uint8_t b = file.read();
                     uint8_t g = file.read();
                     uint8_t r = file.read();
-
-                    // convert RGB value to greyscale
-                    uint8_t greyValue = (uint8_t)((r * 77 + g * 150 + b * 29) >> 8);
-
-                    if (colorCount == 3) {
-                        // select color based on arbitrary range for 3 color
-                        if (greyValue < 86) {
-                            color = GxEPD_BLACK;
-                        }
-                        else if (greyValue < 171) {
-                            color = GxEPD_RED;
-                        }
-                    }
-                    else {
-                        // split 50/50 for 2 color
-                        if (greyValue < 128) {
-                            color = GxEPD_BLACK;
-                        }
-                        else {
-                            color = GxEPD_WHITE;
-                        }
-                    }
+                    gray = (r * 77 + g * 150 + b * 29) >> 8;
                 }
-                else if (depth == 1) {
-                    // 1-bit monochrome data
-                    static uint8_t b;
-                    if (j % 8 == 0) {
-                        b = file.read();
-                    }
-
-                    color = (b & (0x80 >> (j % 8))) ? GxEPD_WHITE : GxEPD_BLACK;
+                else {
+                    // 1-bit logic: treat as 0 or 255
+                    static uint8_t b_byte;
+                    if (j % 8 == 0)
+                        b_byte = file.read();
+                    gray = (b_byte & (0x80 >> (j % 8))) ? 255 : 0;
                 }
 
-                // GxEPD2 paged loop only renders pixels in the current page buffer
+                // Add existing error to current pixel
+                int16_t pixelWithErr = gray + currentRowErr[j];
+
+                // Threshold to Black or White
+                uint16_t color = (pixelWithErr < 128) ? GxEPD_BLACK : GxEPD_WHITE;
+                int16_t actualGray = (color == GxEPD_BLACK) ? 0 : 255;
+
                 display.drawPixel(j, i, color);
-            }
-        }
 
+                // Calculate error and diffuse to neighbors
+                int16_t err = pixelWithErr - actualGray;
+                if (j + 1 < width)
+                    currentRowErr[j + 1] += err * 7 / 16;
+                if (i + 1 < absHeight) {
+                    if (j > 0)
+                        nextRowErr[j - 1] += err * 3 / 16;
+                    nextRowErr[j] += err * 5 / 16;
+                    if (j + 1 < width)
+                        nextRowErr[j + 1] += err * 1 / 16;
+                }
+            }
+            // Prepare for next row: move nextRow errors up and clear
+            memcpy(currentRowErr, nextRowErr, width * sizeof(int16_t));
+            memset(nextRowErr, 0, width * sizeof(int16_t));
+        }
         file.close();
     } while (display.nextPage());
 
+    free(currentRowErr);
+    free(nextRowErr);
     Serial.println("");
 }
