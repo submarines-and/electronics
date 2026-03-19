@@ -47,7 +47,8 @@ uint32_t read32(File& f)
     f.read((uint8_t*)&result, sizeof(result));
     return result;
 }
-void drawFromFile(const char* filePath)
+
+oid drawFromFile(const char* filePath)
 {
     Serial.print("Rendering ...");
 
@@ -73,7 +74,7 @@ void drawFromFile(const char* filePath)
     uint32_t rowSize = (width * depth / 8 + 3) & ~3;
     bool flip = (height > 0);
 
-    // Allocate two rows for error diffusion (int16 handles negative errors)
+    // Error buffers (2 bytes per pixel width)
     int16_t* currentRowErr = (int16_t*)malloc(width * sizeof(int16_t));
     int16_t* nextRowErr = (int16_t*)malloc(width * sizeof(int16_t));
 
@@ -131,6 +132,7 @@ void drawFromFile(const char* filePath)
                         nextRowErr[j + 1] += err * 1 / 16;
                 }
             }
+
             // Prepare for next row: move nextRow errors up and clear
             memcpy(currentRowErr, nextRowErr, width * sizeof(int16_t));
             memset(nextRowErr, 0, width * sizeof(int16_t));
