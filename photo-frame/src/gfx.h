@@ -76,17 +76,16 @@ void drawFromFile(const char* filePath)
         }
 
         file.seek(10);
-        uint32_t offset = read32(file); // Start of pixel data
+        uint32_t offset = read32(file); // start of pixel data
         file.seek(18);
         uint32_t width = read32(file);
         int32_t height = (int32_t)read32(file);
         file.seek(28);
         uint16_t depth = read16(file); // Bits per pixel (1 or 24)
 
-        // bmp stored upside down
-        bool flip = (height > 0);
+        bool flip = (height > 0); // bmp stored upside down
         uint32_t absHeight = abs(height);
-        uint32_t rowSize = (width * depth / 8 + 3) & ~3; // Rows are 4-byte padded
+        uint32_t rowSize = (width * depth / 8 + 3) & ~3; // each row is 4-byte padded
 
         // pixel loop
         for (uint32_t i = 0; i < absHeight; i++) {
@@ -100,17 +99,25 @@ void drawFromFile(const char* filePath)
                     uint8_t b = file.read();
                     uint8_t g = file.read();
                     uint8_t r = file.read();
-                    // Simple thresholding for 3-color (Red/Black/White)
-                    if (r > 200 && g < 100 && b < 100)
-                        color = GxEPD_RED;
-                    else if (r < 128 && g < 128 && b < 128)
+
+                    // convert RGB value to greyscale
+                    uint8_t greyValue = (uint8_t)((r * 77 + g * 150 + b * 29) >> 8);
+
+                    // select color based on arbitrary range
+                    if (greyValue < 86) {
                         color = GxEPD_BLACK;
                 }
+                    else if (greyValue < 171) {
+                        color = GxEPD_RED;
+                    }
+                }
                 else if (depth == 1) {
-                    // Read 1-bit monochrome data
+                    // 1-bit monochrome data
                     static uint8_t b;
-                    if (j % 8 == 0)
+                    if (j % 8 == 0) {
                         b = file.read();
+                    }
+
                     color = (b & (0x80 >> (j % 8))) ? GxEPD_WHITE : GxEPD_BLACK;
                 }
 
