@@ -84,6 +84,11 @@ void setup()
         //
     });
 
+    // wakeup endpoint
+    server.on("/wakeup", HTTP_GET, [](AsyncWebServerRequest* request) {
+        request->send(200, "text/plain", "OK");
+    });
+
     /*
     // Debug echo file endpoint
     server.on("/download", HTTP_GET, [](AsyncWebServerRequest* request) {
