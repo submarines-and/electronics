@@ -20,14 +20,14 @@ sudo apt-get update
 sudo apt-get install nodejs
 ```
 
-2) Build app in `/api` folder. `
+2) Build app in `/api` folder.
 ```
 yarn
 yarn build
 ```
 
-3) Copy `dist/main.js` to rpi.
-4) Run using `node main.js`. You need to provide env variable `photoFrameIp`, default is my ip.
+3) Copy `dist/main.js` to any folder on the rpi.
+4) Run using `node main.js`. You need to provide env variable `photoFrameIp`.
 5) To autostart: `sudo crontab -e` and then add entry `@reboot sudo /usr/bin/node /path/to/main.js app> &`
 
 
