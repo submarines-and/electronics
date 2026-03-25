@@ -15,6 +15,10 @@
 		{
 			"name": "photo-frame",
 			"path": "photo-frame"
+		},
+		{
+			"name": "kitchen-timer",
+			"path": "kitchen-timer"
 		}
 	],
 	"settings": {}
