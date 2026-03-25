@@ -31,6 +31,7 @@ yarn build
 
 
 ![Manual shortcut](./img/shortcut-1.png)
+![Scheduled shortcut](./img/shortcut-2.png)
 
 
 
