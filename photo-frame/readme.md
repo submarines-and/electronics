@@ -28,7 +28,7 @@ yarn build
 
 3) Copy `dist/main.js` to rpi.
 4) Run using `node main.js`. You need to provide env variable `photoFrameIp`, default is my ip.
-5) To autostart: `sudo crontab -e` and then add entry `/usr/bin/node /home/path/to/main.js`
+5) To autostart: `sudo crontab -e` and then add entry `@reboot sudo /usr/bin/node /path/to/main.js app> &`
 
 
 ![Manual shortcut](./img/shortcut-1.png)
