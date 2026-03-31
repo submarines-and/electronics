@@ -14,21 +14,12 @@ Images need to be processed before uploading. My display has a resolution of 528
 ### Option 2: Using apple shortcuts. 
 Having an active shortcut that sends the currently viewed picture works fine, but the problem starts if you want to schedule this since the timeout is aggressively small. My workaround for this is to send a compressed image to a raspberry pi running an api wrapper around imagemagick. This server then converts the image to BMP and sends it to the photo frame, free of any timeouts.
 
-1) Install dependencies on rpi
-```
-sudo apt-get update
-sudo apt-get install nodejs
-```
-
-2) Build app in `/api` folder.
-```
-yarn
-yarn build
-```
-
-3) Copy `dist/main.js` to any folder on the rpi.
-4) Run using `node main.js`. You need to provide env variable `photoFrameIp`.
-5) To autostart: `sudo crontab -e` and then add entry `@reboot sudo /usr/bin/node /path/to/main.js app> &`
+1) Change to your IP addresses in `main.go`
+2) Build app in `/api` folder `GOOS=linux GOARCH=arm64 go build -o dist/api`
+3) Copy `api` binary to any folder on the rpi.
+4) Make executable `sudo chmod 777 api`
+5a) Run using `./api`.
+5b) To autostart: `sudo crontab -e` and then add entry `@reboot sudo /bin/bash /path/to/binary  &`
 
 
 ![Manual shortcut](./img/shortcut-1.png)
