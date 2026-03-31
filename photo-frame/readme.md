@@ -14,6 +14,12 @@ Images need to be processed before uploading. My display has a resolution of 528
 ### Option 2: Using apple shortcuts. 
 Having an active shortcut that sends the currently viewed picture works fine, but the problem starts if you want to schedule this since the timeout is aggressively small. My workaround for this is to send a compressed image to a raspberry pi running an api wrapper around imagemagick. This server then converts the image to BMP and sends it to the photo frame, free of any timeouts.
 
+#### Install imagemagick
+```bash
+sudo apt-get update
+sudo apt-get install imagemagick
+```
+#### Build and run api
 1) Change to your IP addresses in `main.go`
 2) Build app in `/api` folder `GOOS=linux GOARCH=arm64 go build -o dist/api`
 3) Copy `api` binary to any folder on the rpi.
